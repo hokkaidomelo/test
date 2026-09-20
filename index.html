@@ -1,47 +1,59 @@
 <!DOCTYPE html>
-<html lang="zh-TW" data-theme="dark">
+<html lang="zh-TW" data-theme="dark" data-effects="off">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>VV // 1151 ACADEMIC HUD TERMINAL</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Chakra+Petch:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   
   <style>
     :root {
-      --max-width: 580px;
+      --max-width: 600px;
       --font-display: 'Anton', sans-serif;
-      --font-body: 'Chakra Petch', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: 'Chakra Petch', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
       --font-mono: 'Share Tech Mono', monospace;
     }
 
+    /* DARK THEME */
     html[data-theme="dark"] {
       --bg: #000000;
       --fg: #ffffff;
       --accent: #ffffff;
       --on-accent: #000000;
-      --muted: rgba(255, 255, 255, 0.55);
-      --line: rgba(255, 255, 255, 0.22);
+      --muted: rgba(255, 255, 255, 0.70);
+      --dim: rgba(255, 255, 255, 0.45);
+      --line: rgba(255, 255, 255, 0.26);
+      --line-strong: rgba(255, 255, 255, 0.55);
       --panel: rgba(255, 255, 255, 0.05);
       --panel-hover: rgba(255, 255, 255, 0.09);
+      --panel-active: rgba(255, 255, 255, 0.14);
       --glow: rgba(255, 255, 255, 0.45);
       --vignette-color: rgba(0, 0, 0, 0.85);
+      --row-zebra: rgba(255, 255, 255, 0.025);
     }
 
+    /* LIGHT THEME */
     html[data-theme="light"] {
       --bg: #ffffff;
       --fg: #000000;
       --accent: #000000;
       --on-accent: #ffffff;
-      --muted: rgba(0, 0, 0, 0.55);
-      --line: rgba(0, 0, 0, 0.22);
-      --panel: rgba(0, 0, 0, 0.04);
-      --panel-hover: rgba(0, 0, 0, 0.08);
+      --muted: rgba(0, 0, 0, 0.70);
+      --dim: rgba(0, 0, 0, 0.45);
+      --line: rgba(0, 0, 0, 0.24);
+      --line-strong: rgba(0, 0, 0, 0.60);
+      --panel: rgba(0, 0, 0, 0.035);
+      --panel-hover: rgba(0, 0, 0, 0.075);
+      --panel-active: rgba(0, 0, 0, 0.12);
       --glow: rgba(0, 0, 0, 0.35);
-      --vignette-color: rgba(0, 0, 0, 0.15);
+      --vignette-color: rgba(0, 0, 0, 0.12);
+      --row-zebra: rgba(0, 0, 0, 0.025);
     }
 
+    /* 0.4s Theme transition */
     html.switching,
     html.switching * {
       transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, fill 0.4s ease, opacity 0.4s ease !important;
@@ -58,11 +70,15 @@
       background-color: var(--bg);
       color: var(--fg);
       font-family: var(--font-body);
-      line-height: 1.65;
+      font-size: 14px;
+      line-height: 1.68;
       letter-spacing: 0.02em;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .bg {
@@ -79,9 +95,9 @@
       background-image: 
         linear-gradient(to right, var(--line) 1px, transparent 1px),
         linear-gradient(to bottom, var(--line) 1px, transparent 1px);
-      mask-image: radial-gradient(circle at center, black 40%, transparent 95%);
-      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 95%);
-      animation: gridDrift 18s linear infinite;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
+      -webkit-mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
+      animation: gridDrift 20s linear infinite;
       z-index: -2;
       pointer-events: none;
     }
@@ -106,26 +122,38 @@
       background: repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 3px);
       z-index: 50;
       pointer-events: none;
-      opacity: 0.35;
+      opacity: 0.28;
+      transition: opacity 0.25s ease;
     }
 
     .vignette {
       position: fixed;
       inset: 0;
-      box-shadow: inset 0 0 180px var(--vignette-color);
+      box-shadow: inset 0 0 160px var(--vignette-color);
       z-index: 1;
       pointer-events: none;
     }
 
+    /* Effects OFF modifier: Default Clean Mode for Maximum Readability */
+    html[data-effects="off"] .scanlines {
+      display: none !important;
+    }
+    html[data-effects="off"] .noise {
+      display: none !important;
+    }
+    html[data-effects="off"] .grid {
+      opacity: 0.35;
+    }
+
     .vstrip {
       position: fixed;
-      right: 20px;
+      right: 18px;
       top: 50%;
       transform: translateY(-50%);
       writing-mode: vertical-rl;
       font-family: var(--font-mono);
       font-size: 11px;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.28em;
       color: var(--muted);
       z-index: 6;
       display: flex;
@@ -138,7 +166,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 28px;
+      height: 30px;
       background: var(--bg);
       border-bottom: 1px solid var(--line);
       z-index: 60;
@@ -159,6 +187,7 @@
       align-items: center;
       font-weight: 700;
       z-index: 2;
+      flex-shrink: 0;
     }
 
     .ticker-wrap {
@@ -169,7 +198,7 @@
 
     .ticker-move {
       display: inline-block;
-      animation: ticker 32s linear infinite;
+      animation: ticker 34s linear infinite;
     }
 
     @keyframes ticker {
@@ -177,63 +206,11 @@
       100% { transform: translateX(-50%); }
     }
 
-    #boot-screen {
-      position: fixed;
-      inset: 0;
-      background: #000000;
-      color: #ffffff;
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-      cursor: pointer;
-      transition: clip-path 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-      clip-path: inset(0 0 0 0);
-    }
-
-    #boot-screen.dismissed {
-      clip-path: inset(50% 0 50% 0);
-      pointer-events: none;
-    }
-
-    .boot-box {
-      max-width: 440px;
-      width: 100%;
-      font-family: var(--font-mono);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      padding: 24px;
-      background: rgba(10, 10, 10, 0.9);
-      position: relative;
-    }
-
-    .boot-title {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      letter-spacing: 0.05em;
-      margin-bottom: 8px;
-    }
-
-    .boot-bar-track {
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.2);
-      margin: 16px 0 10px;
-      overflow: hidden;
-    }
-
-    .boot-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: #ffffff;
-      transition: width 0.15s ease-out;
-    }
-
+    /* Container & Layout */
     .container {
       max-width: var(--max-width);
       margin: 0 auto;
-      padding: 44px 16px 120px;
+      padding: 48px 18px 126px;
       position: relative;
       z-index: 5;
     }
@@ -242,31 +219,39 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      padding: 16px 0 12px;
+      padding: 16px 0 14px;
       border-bottom: 1px solid var(--line);
       margin-bottom: 20px;
+      gap: 12px;
     }
 
     .brand-title {
       font-family: var(--font-display);
-      font-size: 2.1rem;
+      font-size: 2.25rem;
       line-height: 1;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
     }
 
     .brand-sub {
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--muted);
       letter-spacing: 0.18em;
-      margin-top: 4px;
+      margin-top: 5px;
     }
 
-    .theme-toggle-wrap {
+    .hud-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .controls-row {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .thm-b {
@@ -275,10 +260,18 @@
       color: var(--fg);
       font-family: var(--font-mono);
       font-size: 11px;
-      padding: 4px 10px;
+      padding: 4px 9px;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .thm-b:hover {
+      border-color: var(--line-strong);
+      background: var(--panel-hover);
     }
 
     .thm-b[aria-pressed="true"] {
@@ -288,12 +281,39 @@
       font-weight: 700;
     }
 
+    /* Cards and Borders */
+    .card {
+      background: var(--panel);
+      backdrop-filter: blur(12px) saturate(1.15);
+      -webkit-backdrop-filter: blur(12px) saturate(1.15);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .border-solid { border: 1px solid var(--line); }
+    .border-dashed { border: 1px dashed var(--line); }
+    .border-double { border: 3px double var(--line); }
+
+    .tech-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      padding: 2px 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      display: inline-flex;
+      align-items: center;
+      border-radius: 4px;
+    }
+
     .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 11px;
       padding: 2px 8px;
       border: 1px solid var(--line);
       border-radius: 4px;
@@ -314,48 +334,313 @@
       50% { opacity: 0.3; transform: scale(0.8); }
     }
 
-    .card {
+    .schedule-view-switcher {
+      display: flex;
       background: var(--panel);
-      backdrop-filter: blur(12px) saturate(1.15);
-      -webkit-backdrop-filter: blur(12px) saturate(1.15);
-      border-radius: 12px;
-      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 3px;
+      margin-bottom: 14px;
+      gap: 4px;
+    }
+
+    .view-btn {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      padding: 6px 10px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .view-btn:hover {
+      color: var(--fg);
+    }
+
+    .view-btn.active {
+      background: var(--accent);
+      color: var(--on-accent);
+      font-weight: 700;
+      border-color: var(--accent);
+    }
+
+    /* Day-by-Day Day Selector Bar */
+    .day-pill-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .day-pill-btn {
+      flex: 1;
+      min-width: 68px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 8px 4px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--fg);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1.2;
+    }
+
+    .day-pill-btn .d-sub {
+      font-size: 9.5px;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .day-pill-btn.active {
+      background: var(--panel-active);
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--glow);
+    }
+
+    .day-pill-btn.active .d-sub {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* Day Card Course item */
+    .day-course-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .day-course-card:hover {
+      background: var(--panel-hover);
+      border-color: var(--line-strong);
+      transform: translateY(-1px);
+    }
+
+    .day-course-card.highlight-card {
+      border-color: var(--accent);
+      background: var(--panel-active);
+    }
+
+    .card-time-col {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      border-right: 1px dashed var(--line);
+      padding-right: 14px;
+      min-width: 86px;
+      text-align: center;
+    }
+
+    .card-slot-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      background: var(--accent);
+      color: var(--on-accent);
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    .card-time-range {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .card-info-col {
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .card-meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-family: var(--font-mono);
+    }
+
+    .card-action-btn {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--fg);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .card-action-btn:hover {
+      background: var(--accent);
+      color: var(--on-accent);
+      border-color: var(--accent);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .table-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .table-container::-webkit-scrollbar-thumb {
+      background: var(--line);
+      border-radius: 3px;
+    }
+
+    .tt-table {
+      width: 100%;
+      min-width: 500px;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .tt-table th, .tt-table td {
+      border: 1px solid var(--line);
+      padding: 8px 4px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .tt-table th {
+      background: var(--panel-hover);
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 10px 4px;
+    }
+
+    .tt-slot {
+      font-weight: 700;
+      background: var(--panel);
+      font-size: 11px;
+      line-height: 1.25;
+      width: 13%;
+    }
+
+    .tt-slot-time {
+      font-size: 9.5px;
+      color: var(--muted);
+      font-weight: 400;
+      display: block;
+    }
+
+    .tt-cell-active {
+      background: var(--accent);
+      color: var(--on-accent);
+      font-weight: 600;
+      font-size: 11.5px;
+      padding: 8px 3px;
+      line-height: 1.3;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.16s ease, filter 0.16s ease;
+      user-select: none;
+    }
+
+    .tt-cell-active:hover {
+      filter: brightness(0.88);
+      transform: scale(0.98);
+    }
+
+    .tt-cell-active:active {
+      transform: scale(0.95);
+    }
+
+    .tt-loc {
+      font-size: 9.5px;
+      opacity: 0.9;
+      display: block;
+      font-family: var(--font-mono);
+      font-weight: 400;
+      margin-top: 2px;
+      border-top: 1px dashed rgba(128, 128, 128, 0.4);
+      padding-top: 2px;
+    }
+
+    .search-filter-box {
       margin-bottom: 16px;
       position: relative;
     }
 
-    .border-solid {
+    .search-input {
+      width: 100%;
+      background: var(--panel);
       border: 1px solid var(--line);
-    }
-    .border-dashed {
-      border: 1px dashed var(--line);
-    }
-    .border-double {
-      border: 3px double var(--line);
-    }
-
-    .tech-pill {
+      color: var(--fg);
       font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      padding: 2px 8px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+      font-size: 13px;
+      padding: 10px 14px 10px 34px;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    /* Details Disclosure Styling */
     details {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       background: var(--panel);
-      border-radius: 8px;
+      border-radius: 10px;
       overflow: hidden;
       transition: background-color 0.2s, box-shadow 0.3s;
     }
+
     details[open] {
       background: var(--panel-hover);
     }
+
     summary {
-      padding: 12px 14px;
+      padding: 14px 16px;
       list-style: none;
       cursor: pointer;
       display: flex;
@@ -363,24 +648,49 @@
       align-items: center;
       font-family: var(--font-body);
       font-weight: 600;
+      font-size: 14.5px;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 10px;
+      user-select: none;
+      gap: 8px;
     }
+
     details[open] summary {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
       border-bottom: 1px dashed var(--line);
     }
-    summary::-webkit-details-marker {
-      display: none;
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary .sum-right {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
     }
+
+    summary .chevron {
+      display: inline-block;
+      transition: transform 0.24s ease;
+      font-size: 11px;
+    }
+
+    details[open] summary .chevron {
+      transform: rotate(90deg);
+    }
+
     .detail-body {
-      padding: 14px;
+      padding: 16px;
       border: 1px solid var(--line);
       border-top: none;
       font-size: 13.5px;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      background: color-mix(in srgb, var(--panel) 40%, transparent);
     }
 
     /* Target highlight flash for syllabus jump */
@@ -402,70 +712,145 @@
       }
     }
 
+    /* Course Specs & Progress Bars */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 12.5px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+    }
+
     .data-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12.5px;
-      margin: 8px 0;
-      font-family: var(--font-mono);
+      font-size: 13px;
+      margin: 10px 0;
+      font-family: var(--font-body);
     }
+
     .data-table th, .data-table td {
       border: 1px solid var(--line);
-      padding: 6px 8px;
+      padding: 8px 10px;
       text-align: left;
-    }
-    .data-table th {
-      background: var(--panel);
-      font-weight: 600;
-    }
-
-    .tt-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--font-mono);
-      font-size: 11px;
-    }
-    .tt-table th, .tt-table td {
-      border: 1px solid var(--line);
-      padding: 6px 2px;
-      text-align: center;
       vertical-align: middle;
     }
-    .tt-table th {
-      background: var(--panel);
-    }
-    .tt-slot {
-      font-weight: 700;
-      background: var(--panel);
-      font-size: 10px;
-    }
-    .tt-cell-active {
-      background: var(--accent);
-      color: var(--on-accent);
+
+    .data-table th {
+      background: var(--panel-hover);
       font-weight: 600;
-      font-size: 10px;
-      padding: 5px 2px;
-      line-height: 1.25;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.16s ease, filter 0.16s ease;
-      user-select: none;
-    }
-    .tt-cell-active:hover {
-      filter: brightness(0.9);
-      transform: scale(0.98);
-    }
-    .tt-cell-active:active {
-      transform: scale(0.95);
-    }
-    .tt-loc {
-      font-size: 8.5px;
-      opacity: 0.85;
-      display: block;
       font-family: var(--font-mono);
-      pointer-events: none;
+      font-size: 12px;
     }
 
+    .data-table tr:nth-child(even) {
+      background: var(--row-zebra);
+    }
+
+    .data-table tr.exam-row {
+      background: var(--panel-active);
+      font-weight: 700;
+    }
+
+    .exam-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--on-accent);
+      padding: 1px 6px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      border-radius: 3px;
+      margin-right: 6px;
+      font-weight: 700;
+    }
+
+    .eval-bar {
+      display: flex;
+      height: 10px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 8px 0 12px;
+      background: var(--panel);
+    }
+
+    .eval-fill {
+      height: 100%;
+      border-right: 1px solid var(--bg);
+      position: relative;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .stat-card {
+      border: 1px solid var(--line);
+      padding: 10px;
+      text-align: center;
+      background: var(--panel);
+      border-radius: 8px;
+    }
+    .stat-val {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+    .stat-lbl {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+    }
+
+    /* HUD Floating Notification Toast */
+    #hud-toast {
+      position: fixed;
+      top: 42px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-30px);
+      background: var(--bg);
+      color: var(--fg);
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 24px var(--glow);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      padding: 8px 18px;
+      border-radius: 6px;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      max-width: 90vw;
+    }
+    #hud-toast.toast-show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .interactive-badge {
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: opacity 0.15s;
+    }
+    .interactive-badge:hover {
+      opacity: 0.75;
+    }
+
+    /* Panels & Transitions */
     .view-panel {
       display: none;
       animation-duration: 0.28s;
@@ -476,19 +861,15 @@
       display: block;
     }
 
-    .slide-in-right {
-      animation-name: slideInRight;
-    }
-    .slide-in-left {
-      animation-name: slideInLeft;
-    }
+    .slide-in-right { animation-name: slideInRight; }
+    .slide-in-left { animation-name: slideInLeft; }
 
     @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(24px); }
+      from { opacity: 0; transform: translateX(20px); }
       to { opacity: 1; transform: translateX(0); }
     }
     @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-24px); }
+      from { opacity: 0; transform: translateX(-20px); }
       to { opacity: 1; transform: translateX(0); }
     }
 
@@ -497,14 +878,14 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: color-mix(in srgb, var(--bg) 85%, transparent);
-      backdrop-filter: blur(12px) saturate(1.2);
-      -webkit-backdrop-filter: blur(12px) saturate(1.2);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(14px) saturate(1.2);
+      -webkit-backdrop-filter: blur(14px) saturate(1.2);
       border-top: 1px solid var(--line);
       display: flex;
       justify-content: center;
-      gap: 6px;
-      padding: 8px 10px max(10px, env(safe-area-inset-bottom));
+      gap: 8px;
+      padding: 8px 12px max(10px, env(safe-area-inset-bottom));
       z-index: 100;
     }
 
@@ -512,7 +893,7 @@
       max-width: var(--max-width);
       width: 100%;
       display: flex;
-      gap: 6px;
+      gap: 8px;
     }
 
     .tab-btn {
@@ -521,7 +902,7 @@
       border: 1px solid var(--line);
       background: var(--panel);
       backdrop-filter: blur(9px);
-      padding: 6px 4px;
+      padding: 7px 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -535,7 +916,7 @@
 
     .tab-btn .n {
       font-family: var(--font-mono);
-      font-size: 8.5px;
+      font-size: 9px;
       letter-spacing: 0.16em;
       color: var(--muted);
       line-height: 1;
@@ -543,15 +924,15 @@
     }
 
     .tab-btn .icon {
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.1;
       filter: grayscale(1);
     }
 
     .tab-btn .t {
       font-family: var(--font-display);
-      font-size: 13px;
-      letter-spacing: 0.05em;
+      font-size: 13.5px;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       line-height: 1.1;
     }
@@ -560,8 +941,8 @@
       position: absolute;
       bottom: 2px;
       right: 2px;
-      width: 5px;
-      height: 5px;
+      width: 6px;
+      height: 6px;
       border-right: 1.5px solid var(--fg);
       border-bottom: 1.5px solid var(--fg);
       opacity: 0.35;
@@ -601,94 +982,72 @@
       opacity: 1;
     }
 
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .stat-card {
-      border: 1px solid var(--line);
-      padding: 10px;
-      text-align: center;
-      background: var(--panel);
-      border-radius: 8px;
-    }
-    .stat-val {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      line-height: 1;
-      margin: 4px 0;
-    }
-    .stat-lbl {
-      font-family: var(--font-mono);
-      font-size: 9.5px;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-    }
-
-    .eval-bar {
-      display: flex;
-      height: 8px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 8px 0;
-      background: var(--panel);
-    }
-    .eval-fill {
-      height: 100%;
-      border-right: 1px solid var(--bg);
-    }
-
-    /* HUD Floating Notification Toast */
-    #hud-toast {
+    /* Boot Splash Dialog */
+    #boot-screen {
       position: fixed;
-      top: 40px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-30px);
-      background: var(--bg);
-      color: var(--fg);
-      border: 1px solid var(--accent);
-      box-shadow: 0 0 20px var(--glow);
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      letter-spacing: 0.1em;
-      padding: 8px 16px;
-      border-radius: 6px;
-      z-index: 9999;
-      pointer-events: none;
-      opacity: 0;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      inset: 0;
+      background: #000000;
+      color: #ffffff;
+      z-index: 999;
       display: flex;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-    #hud-toast.toast-show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .interactive-badge {
+      padding: 24px;
       cursor: pointer;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .interactive-badge:hover {
-      opacity: 0.75;
+      transition: clip-path 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+      clip-path: inset(0 0 0 0);
     }
 
+    #boot-screen.dismissed {
+      clip-path: inset(50% 0 50% 0);
+      pointer-events: none;
+    }
+
+    .boot-box {
+      max-width: 450px;
+      width: 100%;
+      font-family: var(--font-mono);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 26px;
+      background: rgba(10, 10, 10, 0.92);
+      position: relative;
+    }
+
+    .boot-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .boot-bar-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 16px 0 10px;
+      overflow: hidden;
+    }
+
+    .boot-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #ffffff;
+      transition: width 0.15s ease-out;
+    }
+
+    /* Responsive adjustments */
     @media (max-width: 640px) {
       .vstrip { display: none; }
-      .scanlines { opacity: 0.18; }
-      .tab-btn .t { font-size: 11px; }
-      .brand-title { font-size: 1.8rem; }
+      .brand-title { font-size: 1.9rem; }
+      .specs-grid { grid-template-columns: 1fr; }
+      .card-slot-badge { font-size: 10px; }
+      .card-title { font-size: 14px; }
     }
 
     @media (max-width: 380px) {
       .tab-btn .n { display: none; }
-      .tab-btn .t { font-size: 10px; }
+      .tab-btn .t { font-size: 11px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -706,34 +1065,36 @@
 </head>
 <body>
 
-  <!-- Background decorative layers -->
   <div class="bg"></div>
   <div class="grid"></div>
   <div class="noise"></div>
   <div class="scanlines"></div>
   <div class="vignette"></div>
 
-  <!-- Vertical Strip Decoration (Desktop only) -->
+  <!-- Vertical Desktop Deco -->
   <div class="vstrip">
     <span>北海道蜜瓜//VV.SECURITY.PROTOCOL</span>
-    <span>SYS.VER: 1151-VV-RELEASE</span>
+    <span>SYS.VER: 1151-VV-LEGIBILITY</span>
     <span>STATUS: OPERATIONAL</span>
   </div>
 
+  <!-- Top Ticker Bar with live text -->
   <div class="ticker-bar">
     <div class="ticker-label">VV//SYS</div>
     <div class="ticker-wrap">
       <div class="ticker-move">
-        &bull; 學生：HokkaidoMelo &bull; VV 1151 課程終端機就緒 &bull; 總修習門數：9 門 &bull; 總學分數：22 學分 &bull; 停修：0 學分 &bull; 點擊課表格子即可跳轉大綱說明 &bull; 北海道蜜瓜學則條款就緒 &bull; 實驗室請勿飲食穿拖鞋 &bull; 按鍵盤 [T] 快速切換黑白主題 &bull;
+        &bull; 學生：HokkaidoMelo &bull; VV 1151 課程終端機就緒 &bull; 總修習門數：9 門 &bull; 總學分數：22 學分 &bull; 停修：0 學分 &bull; 預設高清晰模式 (CRT FX: OFF) &bull; 點擊任一課程即刻展開大綱並高亮跳轉 &bull; 支援全週矩陣與每日清單視圖切換 &bull; 北海道蜜瓜學則條款就緒 &bull; 按鍵盤 [T] 快速切換黑白主題 &bull;
       </div>
     </div>
   </div>
 
+  <!-- HUD Toast Notification -->
   <div id="hud-toast" role="status" aria-live="polite">
     <span class="pulse-dot"></span>
     <span id="hud-toast-msg">SYS INFO</span>
   </div>
 
+  <!-- Boot Overlay -->
   <div id="boot-screen" role="dialog" aria-modal="true" aria-label="系統開機程序">
     <div class="boot-box">
       <div class="boot-title">VV // BOOT</div>
@@ -741,30 +1102,40 @@
       <div class="boot-bar-track">
         <div class="boot-bar-fill" id="boot-progress"></div>
       </div>
-      <div id="boot-sub" style="font-size:11px; height:18px; color:#888;"></div>
-      <div style="font-size:9px; margin-top:16px; opacity:0.6; text-align:right;">[ CLICK ANYWHERE TO SKIP ]</div>
+      <div id="boot-sub" style="font-size:11.5px; height:18px; color:#888;"></div>
+      <div style="font-size:10px; margin-top:16px; opacity:0.65; text-align:right;">[ CLICK ANYWHERE TO SKIP ]</div>
     </div>
   </div>
 
   <main class="container">
 
+    <!-- Header HUD -->
     <header class="header-hud">
       <div>
         <h1 class="brand-title">VV // TERMINAL</h1>
         <div class="brand-sub">北海道蜜瓜 電子工程學系 1151 課程戰情總端</div>
       </div>
-      <div class="theme-toggle-wrap">
-        <button class="thm-b" id="btn-theme-light" aria-pressed="false" title="白底黑字">LIGHT</button>
-        <button class="thm-b" id="btn-theme-dark" aria-pressed="true" title="黑底白字">DARK</button>
+      <div class="hud-controls">
+        <div class="controls-row">
+          <button class="thm-b" id="btn-theme-light" aria-pressed="false" title="白底黑字">LIGHT</button>
+          <button class="thm-b" id="btn-theme-dark" aria-pressed="true" title="黑底白字">DARK</button>
+        </div>
+        <div class="controls-row">
+          <button class="thm-b" id="btn-toggle-effects" title="關閉/開啟掃描線與濾鏡">
+            <span>CRT FX</span>
+            <strong id="fx-status-text">[OFF]</strong>
+          </button>
+        </div>
       </div>
     </header>
 
+    <!-- Student Profile Card -->
     <section class="card border-solid" style="margin-bottom: 20px;">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
           <span class="tech-pill">VV//NODE-PROFILE</span>
-          <div style="font-size: 1.15rem; font-weight:700; margin-top:6px;">HokkaidoMelo</div>
-          <div style="font-size:11.5px; color:var(--muted); font-family:var(--font-mono);">北海道蜜瓜 電子工程學系 (三年級)</div>
+          <div style="font-size: 1.25rem; font-weight:700; margin-top:6px; letter-spacing:0.02em;">HokkaidoMelo</div>
+          <div style="font-size:12px; color:var(--muted); font-family:var(--font-mono);">北海道蜜瓜 電子工程學系 (三年級)</div>
         </div>
         <div class="status-badge">
           <span class="pulse-dot"></span>
@@ -772,7 +1143,7 @@
         </div>
       </div>
       
-      <hr style="border:0; border-top:1px dashed var(--line); margin:12px 0;" />
+      <hr style="border:0; border-top:1px dashed var(--line); margin:14px 0;" />
 
       <div class="stat-grid">
         <div class="stat-card">
@@ -787,119 +1158,154 @@
         </div>
         <div class="stat-card">
           <div class="stat-lbl">STATUS</div>
-          <div class="stat-val" style="font-size:1.2rem; padding: 4px 0;">NORMAL</div>
+          <div class="stat-val" style="font-size:1.25rem; padding: 3px 0;">NORMAL</div>
           <div class="stat-lbl">0 DROPPED</div>
         </div>
       </div>
     </section>
 
     <div id="panel-schedule" class="view-panel active">
+      
+      <!-- Top Switcher: Matrix vs Day-by-Day -->
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-        <span class="tech-pill">TIMETABLE MATRIX [CLICK CELL TO VIEW]</span>
-        <span style="font-family:var(--font-mono); font-size:10px; color:var(--muted);">SYNC: 1151-REGULAR</span>
+        <span class="tech-pill">TIMETABLE DISPLAY MODE</span>
+        <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted);">1151-ACADEMIC</span>
       </div>
 
-      <div class="card border-solid" style="padding:10px; overflow-x:auto;">
-        <table class="tt-table">
-          <thead>
-            <tr>
-              <th style="width:14%;">節次</th>
-              <th style="width:17%;">週一</th>
-              <th style="width:17%;">週二</th>
-              <th style="width:17%;">週三</th>
-              <th style="width:17%;">週四</th>
-              <th style="width:17%;">週五</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="tt-slot">2<br><span style="font-size:8px; opacity:0.6;">09:10</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el210c" title="點擊檢視 數位邏輯 課程大綱">數位邏輯<span class="tt-loc">教309</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el520g" title="點擊檢視 半導體物理 課程大綱">半導體物理<span class="tt-loc">商設208</span></td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td class="tt-slot">3<br><span style="font-size:8px; opacity:0.6;">10:10</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el210c" title="點擊檢視 數位邏輯 課程大綱">數位邏輯<span class="tt-loc">教309</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el520g" title="點擊檢視 半導體物理 課程大綱">半導體物理<span class="tt-loc">商設208</span></td>
-              <td class="tt-cell-active" data-course-id="course-el214g" title="點擊檢視 電磁學(一) 課程大綱">電磁學(一)<span class="tt-loc">教605</span></td>
-            </tr>
-            <tr>
-              <td class="tt-slot">4<br><span style="font-size:8px; opacity:0.6;">11:10</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el210c" title="點擊檢視 數位邏輯 課程大綱">數位邏輯<span class="tt-loc">教309</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el520g" title="點擊檢視 半導體物理 課程大綱">半導體物理<span class="tt-loc">商設208</span></td>
-              <td class="tt-cell-active" data-course-id="course-el214g" title="點擊檢視 電磁學(一) 課程大綱">電磁學(一)<span class="tt-loc">教605</span></td>
-            </tr>
-            <tr>
-              <td class="tt-slot">B<br><span style="font-size:8px; opacity:0.6;">12:10</span></td>
-              <td style="font-size:8.5px; opacity:0.6; cursor:pointer;" data-course-id="mentor-interview" title="導師晤談時間">導師晤談*</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el214g" title="點擊檢視 電磁學(一) 課程大綱">電磁學(一)<span class="tt-loc">教605</span></td>
-            </tr>
-            <tr>
-              <td class="tt-slot">5<br><span style="font-size:8px; opacity:0.6;">13:10</span></td>
-              <td class="tt-cell-active" data-course-id="course-el339g" title="點擊檢視 電子系統實驗 課程大綱">電子系統實<span class="tt-loc">電410</span></td>
-              <td class="tt-cell-active" data-course-id="course-ge151b" title="點擊檢視 媒體與國際關係 課程大綱">媒體國際<span class="tt-loc">教810</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-ge488f" title="點擊檢視 工程倫理 課程大綱">工程倫理<span class="tt-loc">教112</span></td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td class="tt-slot">6<br><span style="font-size:8px; opacity:0.6;">14:10</span></td>
-              <td class="tt-cell-active" data-course-id="course-el339g" title="點擊檢視 電子系統實驗 課程大綱">電子系統實<span class="tt-loc">電410</span></td>
-              <td class="tt-cell-active" data-course-id="course-ge151b" title="點擊檢視 媒體與國際關係 課程大綱">媒體國際<span class="tt-loc">教810</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-ge488f" title="點擊檢視 工程倫理 課程大綱">工程倫理<span class="tt-loc">教112</span></td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td class="tt-slot">7<br><span style="font-size:8px; opacity:0.6;">15:10</span></td>
-              <td class="tt-cell-active" data-course-id="course-el339g" title="點擊檢視 電子系統實驗 課程大綱">電子系統實<span class="tt-loc">電410</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el255g" title="點擊檢視 電子學(三) 課程大綱">電子學(三)<span class="tt-loc">教605</span></td>
-              <td>-</td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td class="tt-slot">8<br><span style="font-size:8px; opacity:0.6;">16:10</span></td>
-              <td class="tt-cell-active" data-course-id="course-el307g" title="點擊檢視 Matlab程式設計 課程大綱">Matlab程式<span class="tt-loc">電410</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el255g" title="點擊檢視 電子學(三) 課程大綱">電子學(三)<span class="tt-loc">教605</span></td>
-              <td>-</td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td class="tt-slot">C<br><span style="font-size:8px; opacity:0.6;">17:05</span></td>
-              <td class="tt-cell-active" data-course-id="course-el307g" title="點擊檢視 Matlab程式設計 課程大綱">Matlab程式<span class="tt-loc">電410</span></td>
-              <td>-</td>
-              <td class="tt-cell-active" data-course-id="course-el255g" title="點擊檢視 電子學(三) 課程大綱">電子學(三)<span class="tt-loc">教605</span></td>
-              <td>-</td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td class="tt-slot">D<br><span style="font-size:8px; opacity:0.6;">18:00</span></td>
-              <td class="tt-cell-active" data-course-id="course-el307g" title="點擊檢視 Matlab程式設計 課程大綱">Matlab程式<span class="tt-loc">電410</span></td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="schedule-view-switcher">
+        <button class="view-btn active" id="btn-view-matrix">
+          <span>⊞</span> 全週矩陣 (MATRIX)
+        </button>
+        <button class="view-btn" id="btn-view-day">
+          <span>☷</span> 每日清單 (DAY-BY-DAY)
+        </button>
       </div>
 
-      <!-- Quick Jump Card for all 9 enrolled courses -->
+      <!-- VIEW A: All-in-One Matrix View -->
+      <div id="view-mode-matrix">
+        <div class="card border-solid" style="padding:12px;">
+          <div style="font-size:12px; color:var(--muted); font-family:var(--font-mono); margin-bottom:8px; display:flex; justify-content:space-between;">
+            <span>[點擊課表格子直接跳轉大綱]</span>
+            <span>左右滑動檢視全部天數 &rarr;</span>
+          </div>
+
+          <div class="table-container">
+            <table class="tt-table">
+              <thead>
+                <tr>
+                  <th>節次/時間</th>
+                  <th>週一</th>
+                  <th>週二</th>
+                  <th>週三</th>
+                  <th>週四</th>
+                  <th>週五</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="tt-slot">2<span class="tt-slot-time">09:10-10:00</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el210c" title="數位邏輯電路設計">數位邏輯<span class="tt-loc">教309</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el520g" title="基礎半導體物理與元件(一)">半導體物理<span class="tt-loc">商設208</span></td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">3<span class="tt-slot-time">10:10-11:00</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el210c" title="數位邏輯電路設計">數位邏輯<span class="tt-loc">教309</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el520g" title="基礎半導體物理與元件(一)">半導體物理<span class="tt-loc">商設208</span></td>
+                  <td class="tt-cell-active" data-course-id="course-el214g" title="電磁學(一)">電磁學(一)<span class="tt-loc">教605</span></td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">4<span class="tt-slot-time">11:10-12:00</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el210c" title="數位邏輯電路設計">數位邏輯<span class="tt-loc">教309</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el520g" title="基礎半導體物理與元件(一)">半導體物理<span class="tt-loc">商設208</span></td>
+                  <td class="tt-cell-active" data-course-id="course-el214g" title="電磁學(一)">電磁學(一)<span class="tt-loc">教605</span></td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">B<span class="tt-slot-time">12:10-13:00</span></td>
+                  <td style="font-size:10px; opacity:0.75; cursor:pointer;" data-course-id="mentor-interview" title="點擊檢視導師晤談資訊">導師晤談*<br><span style="font-size:8.5px;">電學511</span></td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el214g" title="電磁學(一)">電磁學(一)<span class="tt-loc">教605</span></td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">5<span class="tt-slot-time">13:10-14:00</span></td>
+                  <td class="tt-cell-active" data-course-id="course-el339g" title="電子系統實驗">電子系統實<span class="tt-loc">電410</span></td>
+                  <td class="tt-cell-active" data-course-id="course-ge151b" title="媒體與國際關係">媒體國際<span class="tt-loc">教810</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-ge488f" title="工程倫理">工程倫理<span class="tt-loc">教112</span></td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">6<span class="tt-slot-time">14:10-15:00</span></td>
+                  <td class="tt-cell-active" data-course-id="course-el339g" title="電子系統實驗">電子系統實<span class="tt-loc">電410</span></td>
+                  <td class="tt-cell-active" data-course-id="course-ge151b" title="媒體與國際關係">媒體國際<span class="tt-loc">教810</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-ge488f" title="工程倫理">工程倫理<span class="tt-loc">教112</span></td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">7<span class="tt-slot-time">15:10-16:00</span></td>
+                  <td class="tt-cell-active" data-course-id="course-el339g" title="電子系統實驗">電子系統實<span class="tt-loc">電410</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el255g" title="電子學(三)">電子學(三)<span class="tt-loc">教605</span></td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">8<span class="tt-slot-time">16:10-17:00</span></td>
+                  <td class="tt-cell-active" data-course-id="course-el307g" title="Matlab程式設計">Matlab程式<span class="tt-loc">電410</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el255g" title="電子學(三)">電子學(三)<span class="tt-loc">教605</span></td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">C<span class="tt-slot-time">17:05-17:55</span></td>
+                  <td class="tt-cell-active" data-course-id="course-el307g" title="Matlab程式設計">Matlab程式<span class="tt-loc">電410</span></td>
+                  <td>-</td>
+                  <td class="tt-cell-active" data-course-id="course-el255g" title="電子學(三)">電子學(三)<span class="tt-loc">教605</span></td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td class="tt-slot">D<span class="tt-slot-time">18:00-18:50</span></td>
+                  <td class="tt-cell-active" data-course-id="course-el307g" title="Matlab程式設計">Matlab程式<span class="tt-loc">電410</span></td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW B: Day-by-Day View (Enhanced Readability on Mobile & Desktop) -->
+      <div id="view-mode-day" style="display:none;">
+        <div class="day-pill-bar">
+          <button class="day-pill-btn active" data-day="1">週一 (MON)<span class="d-sub">2 門課</span></button>
+          <button class="day-pill-btn" data-day="2">週二 (TUE)<span class="d-sub">2 門課</span></button>
+          <button class="day-pill-btn" data-day="3">週三 (WED)<span class="d-sub">1 門課</span></button>
+          <button class="day-pill-btn" data-day="4">週四 (THU)<span class="d-sub">2 門課</span></button>
+          <button class="day-pill-btn" data-day="5">週五 (FRI)<span class="d-sub">1 門課</span></button>
+        </div>
+
+        <!-- Day Content Container populated via JS -->
+        <div id="day-cards-list"></div>
+      </div>
+
+      <!-- Quick Jump Navigator for all enrolled courses -->
       <div class="card border-solid">
-        <div style="font-family:var(--font-mono); font-size:11px; margin-bottom:8px; font-weight:700;">// 本學期 9 門修習課程快速導航</div>
-        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <div style="font-family:var(--font-mono); font-size:12px; margin-bottom:10px; font-weight:700;">// 本學期 9 門修習課程快速跳轉索引</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
           <span class="tech-pill interactive-badge" data-course-id="course-el339g">電子系統實驗</span>
           <span class="tech-pill interactive-badge" data-course-id="course-el307g">Matlab程式設計</span>
           <span class="tech-pill interactive-badge" data-course-id="course-el210c">數位邏輯電路設計</span>
@@ -913,340 +1319,759 @@
       </div>
 
       <div class="card border-double">
-        <div style="font-family:var(--font-mono); font-size:11px; margin-bottom:4px; font-weight:700;">// SPECIAL ENTRIES</div>
-        <ul style="list-style: square inside; font-size:12.5px;">
-          <li class="interactive-badge" data-course-id="course-el403d" style="margin-bottom:4px;"><strong>EL403D 物聯網創意設計(二)</strong>：無固定課表排程（點擊檢視專案說明）。</li>
-          <li class="interactive-badge" data-course-id="mentor-interview"><strong>導師晤談時段</strong>：劉宏煥 老師（週一 12:10~13:00 / 電學 511，自由前往）。</li>
+        <div style="font-family:var(--font-mono); font-size:12px; margin-bottom:6px; font-weight:700;">// 專案與非排程時段說明</div>
+        <ul style="list-style: square inside; font-size:13px; line-height: 1.7;">
+          <li class="interactive-badge" data-course-id="course-el403d" style="margin-bottom:6px;">
+            <strong>EL403D 物聯網創意設計(二)</strong>：無固定每週排程，依專案驗收安排（點擊查看大綱說明）。
+          </li>
+          <li class="interactive-badge" data-course-id="mentor-interview">
+            <strong>導師晤談時段</strong>：劉宏煥 老師（週一 12:10~13:00 / 電學大樓 511 教室，生活與學業晤談自由前往）。
+          </li>
         </ul>
       </div>
     </div>
 
     <div id="panel-courses" class="view-panel">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
         <span class="tech-pill">DETAILED SYLLABUS DIRECTORY</span>
-        <span style="font-family:var(--font-mono); font-size:10px; color:var(--muted);">COUNT: 9 SYLLABUS</span>
+        <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted);">COUNT: 9 COURSES</span>
       </div>
 
-      <!-- COURSE 1 -->
-      <details id="course-el339g" class="border-solid">
-        <summary>
-          <span>[EL339G] 電子系統實驗 (必修 1學分)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">陳聖文 &bull; 電學410</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>週一 13:10~16:00 (5,6,7節) | <strong>TA：</strong>高子翔、馮致嘉<br>
-            <strong>核心：</strong>數位實驗模組製作、測試、除錯、邏輯設計理論實作應用。
-          </div>
-          <table class="data-table">
-            <thead>
-              <tr><th>週次</th><th>單元與實作進度內容</th><th>評量</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>W01 (09-14)</td><td>實驗室安全宣導、分組、進度評分說明</td><td>問答</td></tr>
-              <tr><td>W02 (09-21)</td><td>組件介紹、檢查材料、模組焊接 (教科書1-1~1-3)</td><td>問答, 實驗</td></tr>
-              <tr><td>W03 (09-28)</td><td>教師節 (放假)</td><td>-</td></tr>
-              <tr><td>W04 (10-05)</td><td>LA01 邏輯狀態指示器 / LA02 單一脈波產生器 (搶先電路)</td><td>實驗, 報告</td></tr>
-              <tr><td>W05 (10-12)</td><td>LA06 二進制計數器 (AND & NOR, J-K正反器)</td><td>實驗, 報告</td></tr>
-              <tr><td>W06 (10-19)</td><td>LA03 十進制計數器 (除8電路, 任意除N除頻)</td><td>實驗, 報告</td></tr>
-              <tr><td>W07 (10-26)</td><td>補假 (臺灣光復紀念日)</td><td>-</td></tr>
-              <tr><td>W08 (11-02)</td><td>LA05 七段顯示器 (D型正反器門鎖、7490 BCD計數)</td><td>實驗, 報告</td></tr>
-              <tr><td>W09 (11-09)</td><td>期中考試週 (專題問題發想、零件準備)</td><td>專題</td></tr>
-              <tr><td>W10 (11-16)</td><td>LA04 時脈產生器 (多種方波、簡易碼錶)</td><td>實驗, 報告</td></tr>
-              <tr><td>W11 (11-23)</td><td><strong>期中測驗：筆試 + 實作測驗</strong></td><td>筆試, 實作</td></tr>
-              <tr><td>W12-14</td><td>7490計數、JK正反器、脈衝計數與上下計數實驗</td><td>實驗, 報告</td></tr>
-              <tr><td>W15-17</td><td><strong>期末專題：</strong>系統電路整合、故障排除、成品驗收與專題報告</td><td>專題驗收</td></tr>
-              <tr><td>W18 (01-11)</td><td>學期考試週 (專題補驗收與報告補繳)</td><td>-</td></tr>
-            </tbody>
-          </table>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:6px;">
-            <strong>評分：</strong>實驗 20% | 出席 20% | 期中考 25% | 期末專題 35%<br>
-            <strong>教材：</strong>《數位模組化創意實驗》盧明智、許陳鑑、王地河 (全華 2013)
-          </div>
-        </div>
-      </details>
+      <!-- Live Search Box -->
+      <div class="search-filter-box">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          id="syllabus-search" 
+          class="search-input" 
+          placeholder="搜尋課程代碼、課名、教師或關鍵字 (如 EL339G, 陳聖文, OPA, 期中)..." 
+          autocomplete="off"
+        />
+      </div>
 
-      <!-- COURSE 2 -->
-      <details id="course-el307g" class="border-dashed">
-        <summary>
-          <span>[EL307G] Matlab程式設計 (選修 3學分 EMI)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">陳瑞奇 &bull; 電學410</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>週一 16:10~18:50 (8, C, D節) | <strong>TA：</strong>徐常斌<br>
-            <strong>備註：</strong>全英語授課 (EMI)，聚焦於信號處理、GUI 設計及深度學習應用。
-          </div>
-          <table class="data-table">
-            <thead>
-              <tr><th>週次</th><th>主題內容</th><th>評量方式</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>W01 (09-14)</td><td>Course Introduction</td><td>Lab, Assignments</td></tr>
-              <tr><td>W02 (09-21)</td><td>Vectors and Matrices Operations</td><td>Lab, Assignments</td></tr>
-              <tr><td>W03 (09-28)</td><td>No Class (Holiday)</td><td>-</td></tr>
-              <tr><td>W04 (10-05)</td><td>Selection Statements (if/switch)</td><td>Lab, Assignments</td></tr>
-              <tr><td>W05 (10-12)</td><td>Loop Statements and Vectorizing Code</td><td>Lab, Assignments</td></tr>
-              <tr><td>W06 (10-19)</td><td>Functions & Modular Programming</td><td>Lab, Assignments</td></tr>
-              <tr><td>W07 (10-26)</td><td>No Class</td><td>-</td></tr>
-              <tr><td>W08 (11-02)</td><td>Plotting & 2D/3D Visualization</td><td>Lab, Assignments</td></tr>
-              <tr><td>W09 (11-09)</td><td>No Class (Midterm Week)</td><td>-</td></tr>
-              <tr><td>W10 (11-16)</td><td>Cell Arrays and Structures</td><td>Lab, Assignments</td></tr>
-              <tr><td>W11 (11-23)</td><td>File Input/Output (I/O)</td><td>Lab, Assignments</td></tr>
-              <tr><td>W12 (11-30)</td><td>GUI Design and Toolboxes</td><td>Lab, Assignments</td></tr>
-              <tr><td>W13 (12-07)</td><td>Advanced MATLAB Applications</td><td>Lab, Assignments</td></tr>
-              <tr><td>W14-15</td><td>Deep Learning using MATLAB (Part 1 & 2)</td><td>Lab, Assignments</td></tr>
-              <tr><td>W16-17</td><td><strong>Final Project Presentations</strong></td><td>Report & Demo</td></tr>
-              <tr><td>W18 (01-11)</td><td>No Class</td><td>-</td></tr>
-            </tbody>
-          </table>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:6px;">
-            <strong>評分：</strong>平時作業 60% | 期末專題 40%<br>
-            <strong>教材：</strong>《MATLAB Programming with Applications for Engineers》Stephen J. Chapman
-          </div>
-        </div>
-      </details>
+      <div id="syllabus-list">
 
-      <!-- COURSE 3 -->
-      <details id="course-el210c" class="border-solid">
-        <summary>
-          <span>[EL210C] 數位邏輯電路設計 (必修 3學分)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">陳淳杰 &bull; 教學309</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>週二 09:10~12:00 (2,3,4節) | <strong>翻轉教學</strong><br>
-            <strong>線上規定：</strong>錄影非同步教學，i-Learning 有影片講義，每週線上小考與作業。
-          </div>
-          <table class="data-table">
-            <thead>
-              <tr><th>週次</th><th>進度內容</th><th>評量</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>W01 (09-15)</td><td>課程簡介 (第一堂出席計分)</td><td>出席</td></tr>
-              <tr><td>W02-05</td><td>Chap.1-1 ~ Chap.3-7 數字系統與布林代數</td><td>每週上機測驗</td></tr>
-              <tr><td>W06 (10-20)</td><td><strong>第一次小考</strong></td><td>平時考</td></tr>
-              <tr><td>W07-08</td><td>Chap.3-8 ~ 4-10 組合邏輯分析與設計</td><td>上機測驗</td></tr>
-              <tr><td>W09 (11-10)</td><td><strong>期中考試週</strong></td><td>期中考</td></tr>
-              <tr><td>W10-13</td><td>Chap.4-11 ~ Chap.5-11 暫存器、正反器與時序電路</td><td>上機測驗</td></tr>
-              <tr><td>W14 (12-15)</td><td><strong>第二次小考</strong></td><td>平時考</td></tr>
-              <tr><td>W15-16</td><td>Chap.5-12 ~ 6-9 計數器與記憶體結構</td><td>上機測驗</td></tr>
-              <tr><td>W17 (01-05)</td><td>全學期總複習</td><td>討論</td></tr>
-              <tr><td>W18 (01-12)</td><td><strong>期末考</strong></td><td>期末考</td></tr>
-            </tbody>
-          </table>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:6px;">
-            <strong>評分：</strong>上機測驗 15% | 平時考(一) 15% | 平時考(二) 15% | 期中考 25% | 期末考 30%<br>
-            <strong>教材：</strong>《Digital Design: With an Introduction to Verilog, VHDL...》Mano & Ciletti
-          </div>
-        </div>
-      </details>
+        <!-- COURSE 1 -->
+        <details id="course-el339g" class="border-solid" data-search-keys="el339g 電子系統實驗 陳聖文 實作 週一 數位實驗模組 7490">
+          <summary>
+            <span>[EL339G] 電子系統實驗 (必修 1學分)</span>
+            <span class="sum-right">
+              <span>陳聖文 &bull; 電學410</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>週一 13:10~16:00 (5,6,7節)</div>
+              <div><strong>地點：</strong>電學大樓 410</div>
+              <div><strong>授課教師：</strong>陳聖文 教授</div>
+              <div><strong>教學助理：</strong>高子翔、馮致嘉</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>核心能力：</strong>數位實驗模組製作、電路故障排除、邏輯設計硬體整合實作。
+              </div>
+            </div>
 
-      <!-- COURSE 4 -->
-      <details id="course-ge151b" class="border-dashed">
-        <summary>
-          <span>[GE151B] 媒體與國際關係 (選修 2學分 通識)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">林琳文 &bull; 教學810</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>週二 13:10~15:00 (5,6節) | <strong>TA：</strong>王呈鍵<br>
-            <strong>教學目標：</strong>探討媒體對外交、安全與國際議題之影響與批判。
-          </div>
-          <table class="data-table">
-            <thead>
-              <tr><th>週次</th><th>主題單元</th><th>評量</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>W01-03</td><td>導論 / 周幽王烽火台到社群 / 世界就是美國?</td><td>出席問答</td></tr>
-              <tr><td>W04 (10-06)</td><td>產業科技高峰論壇 (圖書館1F秀德廳演講)</td><td>論壇出席</td></tr>
-              <tr><td>W05-08</td><td>大外宣媒體外交 / 好想贏韓國 / 川普民粹 / TikTok地緣政治</td><td>出席問答</td></tr>
-              <tr><td>W09 (11-10)</td><td>期中考試週 (彈性自主學習)</td><td><strong>提交報告題目</strong></td></tr>
-              <tr><td>W10-15</td><td>全球抗議 / 視覺化戰爭 / 恐怖主義 / 後真相 / 文化帝國主義</td><td>出席問答</td></tr>
-              <tr><td>W16-17</td><td><strong>分組上台期末口頭報告</strong></td><td>口頭專題報告</td></tr>
-              <tr><td>W18 (01-12)</td><td>學期考試週</td><td><strong>繳交期末報告</strong></td></tr>
-            </tbody>
-          </table>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:6px;">
-            <strong>評分：</strong>平時出席與問答 20% | 期中報告題目 30% | 期末書面/上台報告 50%
-          </div>
-        </div>
-      </details>
+            <!-- Grade breakdown bar -->
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>專題35% / 期中考25% / 實驗20% / 出席20%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:35%; background:var(--accent);" title="期末專題 35%"></div>
+                <div class="eval-fill" style="width:25%; background:var(--muted);" title="期中考 25%"></div>
+                <div class="eval-fill" style="width:20%; background:var(--fg); opacity:0.35;" title="實驗 20%"></div>
+                <div class="eval-fill" style="width:20%; background:var(--fg); opacity:0.15;" title="出席 20%"></div>
+              </div>
+            </div>
 
-      <!-- COURSE 5 -->
-      <details id="course-el255g" class="border-solid">
-        <summary>
-          <span>[EL255G] 電子學(三) (選修 3學分 核心)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">薛光華 &bull; 教學605</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>週三 15:10~18:00 (7,8,C節)<br>
-            <strong>重點：</strong>OPA 運算放大器分析、回授電路 (Feedback) 四大拓撲、頻率響應 (FR)。
+            <div style="font-weight:700; font-family:var(--font-mono); font-size:12px; margin: 10px 0 6px;">// 18 週課程綱要及實作進度</div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:25%;">週次 / 日期</th>
+                  <th>單元目標及實驗內容</th>
+                  <th style="width:25%;">評量方式</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>W01 (09-14)</td><td>實驗室安全宣導、課程介紹、分組與進度說明</td><td>問答</td></tr>
+                <tr><td>W02 (09-21)</td><td>組件介紹、檢查材料、模組焊接 (教科書1-1~1-3)</td><td>問答, 實驗</td></tr>
+                <tr><td>W03 (09-28)</td><td>教師節 (放假)</td><td>-</td></tr>
+                <tr><td>W04 (10-05)</td><td>LA01 邏輯狀態指示器、LA02 單一脈波產生器 (搶先電路)</td><td>問答, 實驗, 報告</td></tr>
+                <tr><td>W05 (10-12)</td><td>LA06 二進制計數器 (AND & NOR, J-K正反器)</td><td>問答, 實驗, 報告</td></tr>
+                <tr><td>W06 (10-19)</td><td>LA03 十進制計數器 (除8電路, 任意除N除頻電路)</td><td>問答, 實驗, 報告</td></tr>
+                <tr><td>W07 (10-26)</td><td>補假 (臺灣光復紀念日)</td><td>-</td></tr>
+                <tr><td>W08 (11-02)</td><td>LA05 七段顯示器 (D型正反器門鎖、7490 BCD計數器)</td><td>問答, 實驗, 報告</td></tr>
+                <tr class="exam-row">
+                  <td>W09 (11-09)</td>
+                  <td><span class="exam-tag">期中週</span>期中考試週 (專題問題發想、專題零件準備)</td>
+                  <td>專題</td>
+                </tr>
+                <tr><td>W10 (11-16)</td><td>LA04 時脈產生器 (多種方波、簡易碼錶)</td><td>問答, 實驗, 報告</td></tr>
+                <tr class="exam-row">
+                  <td>W11 (11-23)</td>
+                  <td><span class="exam-tag">測驗</span><strong>期中測驗：筆試 + 實作測驗</strong></td>
+                  <td><strong>筆試、實作測驗</strong></td>
+                </tr>
+                <tr><td>W12 (11-30)</td><td>應用實驗：2-8 計數器使用7490、2-10 對稱除(10)10</td><td>問答, 實驗, 報告</td></tr>
+                <tr><td>W13 (12-07)</td><td>應用實驗：2-5 JK 正反器計數、4-9 JK 正反器實驗</td><td>問答, 實驗, 報告</td></tr>
+                <tr><td>W14 (12-14)</td><td>4-6 脈衝計數、4-7 上下計數實驗；期末專題主題確認</td><td>問答, 實驗, 報告</td></tr>
+                <tr class="exam-row">
+                  <td>W15 (12-21)</td>
+                  <td><span class="exam-tag">專題</span>期末專題：電路設計、模組組合與系統製作</td>
+                  <td>專題</td>
+                </tr>
+                <tr class="exam-row">
+                  <td>W16 (12-28)</td>
+                  <td><span class="exam-tag">專題</span>期末專題：系統整合、測試除錯與成品驗收</td>
+                  <td>專題驗收</td>
+                </tr>
+                <tr class="exam-row">
+                  <td>W17 (01-04)</td>
+                  <td><span class="exam-tag">驗收</span>期末專題成品驗收、專題報告繳交</td>
+                  <td>專題報告</td>
+                </tr>
+                <tr><td>W18 (01-11)</td><td>學期考試週 (專題補驗收及專題報告補繳)</td><td>專題補驗收</td></tr>
+              </tbody>
+            </table>
+            <div style="font-size:12px; color:var(--muted); margin-top:8px;">
+              <strong>主要教材：</strong>《數位模組化創意實驗》盧明智、許陳鑑、王地河 (全華圖書 2013, ISBN: 9789572189023)
+            </div>
           </div>
-          <table class="data-table">
-            <thead>
-              <tr><th>週次</th><th>內容單元</th><th>評量</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>W01-03</td><td>Intro to Course / BJT & FET Recap / AC model & Analyses</td><td>講授</td></tr>
-              <tr><td>W04-07</td><td>Introduction to Feedback / Series-Series / Series-Shunt</td><td>講授</td></tr>
-              <tr><td>W08 (11-04)</td><td><strong>課堂測驗 (Test 1)</strong></td><td>測驗</td></tr>
-              <tr><td>W09 (11-11)</td><td>期中考週</td><td>-</td></tr>
-              <tr><td>W10-12</td><td>Shunt-Shunt FB / Shunt-Series FB Circuit Analyses</td><td>講授</td></tr>
-              <tr><td>W13 (12-09)</td><td><strong>課堂測驗 (Test 2)</strong></td><td>測驗</td></tr>
-              <tr><td>W14-15</td><td>OPA 1 & OPA 2 應用分析</td><td>講授 / 測驗</td></tr>
-              <tr><td>W16 (12-30)</td><td><strong>課堂測驗 (Test 3)</strong></td><td>測驗</td></tr>
-              <tr><td>W17 (01-06)</td><td>Frequency Response (FR) 頻率響應</td><td>講授</td></tr>
-              <tr><td>W18 (01-13)</td><td>學期考試週</td><td>期末考</td></tr>
-            </tbody>
-          </table>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:6px;">
-            <strong>評分：</strong>平時作業 28% | 期中測驗 36% | 期末測驗 36%<br>
-            <strong>教材：</strong>《Microelectronics Circuit》Sedra & Smith
-          </div>
-        </div>
-      </details>
+        </details>
 
-      <!-- COURSE 6 -->
-      <details id="course-el520g" class="border-dashed">
-        <summary>
-          <span>[EL520G] 基礎半導體物理與元件(一) (選修 3學分)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">武義 &bull; 商設208</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>週四 09:10~12:00 (2,3,4節)<br>
-            <strong>重點：</strong>晶格結構、能帶能階、載子傳輸、P-N 接面及肖特基/歐姆接觸。
-          </div>
-          <table class="data-table">
-            <thead>
-              <tr><th>週次</th><th>進度內容</th><th>評量</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>W01-03</td><td>Semiconductor lattices and structures</td><td>Homework / Quiz</td></tr>
-              <tr><td>W04-05</td><td>Energy bands and carrier concentrations</td><td>Quiz / Homework</td></tr>
-              <tr><td>W06-07</td><td>Carrier transport phenomena</td><td>Quiz / Homework</td></tr>
-              <tr><td>W08 (11-05)</td><td>Midterm Review</td><td>Homework</td></tr>
-              <tr><td>W09 (11-12)</td><td><strong>Midterm Examination</strong></td><td>測驗</td></tr>
-              <tr><td>W10-12</td><td>P-N junctions 深入分析與特徵曲線</td><td>Quiz / Homework</td></tr>
-              <tr><td>W13-16</td><td>Ohmic contacts & Schottky contacts (W15放假)</td><td>Quiz / Exercise</td></tr>
-              <tr><td>W17-18</td><td>Flexible Teaching Week (AI 自主學習 & 期末測驗)</td><td>Final Exam</td></tr>
-            </tbody>
-          </table>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:6px;">
-            <strong>評分：</strong>平時作業與測驗 10% | 期中測驗 33% | 期末測驗 37% | 正規化調分 20%<br>
-            <strong>教材：</strong>《Semiconductor Devices Physics and Technology》S.M. Sze (3rd Ed.)
-          </div>
-        </div>
-      </details>
+        <!-- COURSE 2 -->
+        <details id="course-el307g" class="border-dashed" data-search-keys="el307g matlab程式設計 陳瑞奇 英語 emi 週一 deep learning gui">
+          <summary>
+            <span>[EL307G] Matlab程式設計 (選修 3學分 EMI)</span>
+            <span class="sum-right">
+              <span>陳瑞奇 &bull; 電學410</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>週一 16:10~18:50 (8,C,D節)</div>
+              <div><strong>地點：</strong>電學大樓 410</div>
+              <div><strong>授課教師：</strong>陳瑞奇 教授</div>
+              <div><strong>TA / 辦公室：</strong>徐常斌 (By appointment)</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>授課語言：</strong>全英語授課 (EMI) &bull; 數值運算、訊號處理、GUI 介面與深度學習應用。
+              </div>
+            </div>
 
-      <!-- COURSE 7 -->
-      <details id="course-ge488f" class="border-solid">
-        <summary>
-          <span>[GE488F] 工程倫理 (必選 2學分 PBL)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">郭泰辰, 鄭琬馨 &bull; 教學112</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>週四 13:10~15:00 (5,6節) | 電資學院指定通識<br>
-            <strong>授課：</strong>郭泰辰老師 70%、鄭琬馨老師 30% (個案研究/AI倫理/DIT前後測)。
-          </div>
-          <table class="data-table">
-            <thead>
-              <tr><th>週次</th><th>單元主題</th><th>活動/評量</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>W01-04</td><td>倫理學、應用倫理、專業倫理概論</td><td>講授問答</td></tr>
-              <tr><td>W05-07</td><td>趨勢倫理、經典案例分析、AI 應用倫理</td><td>個案討論, 作業</td></tr>
-              <tr><td>W09 (11-12)</td><td><strong>期中考試週</strong></td><td>期中考</td></tr>
-              <tr><td>W10-13</td><td>道德/教學倫理、計畫性淘汰探討、資訊倫理</td><td>PBL 討論</td></tr>
-              <tr><td>W14, 16</td><td><strong>分組口頭心得報告發表</strong></td><td>問答, 報告</td></tr>
-              <tr><td>W17 (01-07)</td><td>期末考複習與諮詢</td><td>問答</td></tr>
-              <tr><td>W18 (01-14)</td><td>學期考試週</td><td><strong>期末專題報告繳交</strong></td></tr>
-            </tbody>
-          </table>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:6px;">
-            <strong>評分：</strong>平時表現 10% | 作業 30% | 期末報告 30% | 期末專題 20% | DIT 前後測 10%
-          </div>
-        </div>
-      </details>
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>平時作業 60% / 期末專題報告 40%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:60%; background:var(--accent);" title="平時作業 60%"></div>
+                <div class="eval-fill" style="width:40%; background:var(--muted);" title="期末專題 40%"></div>
+              </div>
+            </div>
 
-      <!-- COURSE 8 -->
-      <details id="course-el214g" class="border-dashed">
-        <summary>
-          <span>[EL214G] 電磁學(一) (必修 3學分)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">康振方 &bull; 教學605</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>週五 10:10~13:00 (3,4,B節) | <strong>TA：</strong>潘冠宇<br>
-            <strong>重點：</strong>向量微積分、靜電場、高斯定律、邊界值問題、鏡像法與拉普拉斯方程。
+            <div style="font-weight:700; font-family:var(--font-mono); font-size:12px; margin: 10px 0 6px;">// 18 週英語授課進度大綱</div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:25%;">週次 / 日期</th>
+                  <th>課程進度主題 (EMI)</th>
+                  <th style="width:25%;">評量方式</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>W01 (09-14)</td><td>Introduction to MATLAB Interactive Environment</td><td>Lab, Assignments</td></tr>
+                <tr><td>W02 (09-21)</td><td>Vectors and Matrices Operations</td><td>Lab, Assignments</td></tr>
+                <tr><td>W03 (09-28)</td><td>No Class (Holiday)</td><td>-</td></tr>
+                <tr><td>W04 (10-05)</td><td>Selection Statements (if-else, switch-case)</td><td>Lab, Assignments</td></tr>
+                <tr><td>W05 (10-12)</td><td>Loop Statements and Vectorizing Code</td><td>Lab, Assignments</td></tr>
+                <tr><td>W06 (10-19)</td><td>Functions & Modular Programming</td><td>Lab, Assignments</td></tr>
+                <tr><td>W07 (10-26)</td><td>No Class</td><td>-</td></tr>
+                <tr><td>W08 (11-02)</td><td>Plotting & 2D/3D Visualization Techniques</td><td>Lab, Assignments</td></tr>
+                <tr class="exam-row">
+                  <td>W09 (11-09)</td>
+                  <td><span class="exam-tag">期中週</span>No Class (Midterm Week Project Preparation)</td>
+                  <td>-</td>
+                </tr>
+                <tr><td>W10 (11-16)</td><td>Cell Arrays and Data Structures</td><td>Lab, Assignments</td></tr>
+                <tr><td>W11 (11-23)</td><td>File Input/Output (I/O) Operations</td><td>Lab, Assignments</td></tr>
+                <tr><td>W12 (11-30)</td><td>GUI Design and Standard Toolboxes</td><td>Lab, Assignments</td></tr>
+                <tr><td>W13 (12-07)</td><td>Advanced MATLAB Engineering Applications</td><td>Lab, Assignments</td></tr>
+                <tr><td>W14 (12-14)</td><td>Deep Learning using MATLAB (Part 1)</td><td>Lab, Assignments</td></tr>
+                <tr><td>W15 (12-21)</td><td>Deep Learning using MATLAB (Part 2)</td><td>Lab, Assignments</td></tr>
+                <tr class="exam-row">
+                  <td>W16 (12-28)</td>
+                  <td><span class="exam-tag">發表</span><strong>Project Presentation 1</strong></td>
+                  <td>Report, Demo</td>
+                </tr>
+                <tr class="exam-row">
+                  <td>W17 (01-04)</td>
+                  <td><span class="exam-tag">發表</span><strong>Project Presentation 2</strong></td>
+                  <td>Report, Demo</td>
+                </tr>
+                <tr><td>W18 (01-11)</td><td>No Class (Finals Week Wrap-up)</td><td>-</td></tr>
+              </tbody>
+            </table>
+            <div style="font-size:12px; color:var(--muted); margin-top:8px;">
+              <strong>教科書：</strong>《MATLAB Programming with Applications for Engineers》Stephen J. Chapman (2013)
+            </div>
           </div>
-          <table class="data-table">
-            <thead>
-              <tr><th>週次</th><th>進度內容</th><th>評量</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>W01-05</td><td>向量分析：曲線座標、散度、旋度、斯托克定理</td><td>課堂問答</td></tr>
-              <tr><td>W06-08</td><td>第三章靜電場：庫侖定律、高斯定律、電位</td><td>問答 / 測驗</td></tr>
-              <tr><td>W09 (11-13)</td><td><strong>期中考試週</strong></td><td>期中測驗</td></tr>
-              <tr><td>W10-12</td><td>導體與介電質、偏極與電位移、能量儲存與電容</td><td>課堂問答</td></tr>
-              <tr><td>W13-17</td><td>帕松及拉普拉斯方程、鏡像法、直交與曲線邊界值問題</td><td>問答 / 測驗</td></tr>
-              <tr><td>W18 (01-15)</td><td><strong>期末考試週</strong></td><td>期末測驗</td></tr>
-            </tbody>
-          </table>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:6px;">
-            <strong>評分：</strong>作業 30% | 期中考 30% | 期末考 40%<br>
-            <strong>教材：</strong>《Introduction to Electrodynamics》David J. Griffiths (4th Ed.)
-          </div>
-        </div>
-      </details>
+        </details>
 
-      <!-- COURSE 9 -->
-      <details id="course-el403d" class="border-solid">
-        <summary>
-          <span>[EL403D] 物聯網創意設計(二) (選修)</span>
-          <span style="font-family:var(--font-mono); font-size:11px;">電子系 &bull; 獨立專案</span>
-        </summary>
-        <div class="detail-body">
-          <div style="margin-bottom:8px;">
-            <strong>時段：</strong>依指導教授與專案小組約定時段進行 | <strong>性質：</strong>物聯網系統與實務應用設計<br>
-            <strong>專案說明：</strong>本課程為自主研究與物聯網模組硬體創作整合，無每週固定教室排程，請定期向專案指導教授進行進度報告與驗收。
+        <!-- COURSE 3 -->
+        <details id="course-el210c" class="border-solid" data-search-keys="el210c 數位邏輯電路設計 陳淳杰 必修 週二 verilog 正反器 布林代數">
+          <summary>
+            <span>[EL210C] 數位邏輯電路設計 (必修 3學分)</span>
+            <span class="sum-right">
+              <span>陳淳杰 &bull; 教學309</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>週二 09:10~12:00 (2,3,4節)</div>
+              <div><strong>地點：</strong>真知教學大樓 309</div>
+              <div><strong>授課教師：</strong>陳淳杰 教授</div>
+              <div><strong>教學助理：</strong>陳冠彰</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>翻轉教學規定：</strong>錄影非同步教學，i-Learning 提供教學影片、講義與線上作業，每週均有線上小考。第一堂出席計入學期成績。
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>期末30% / 期中25% / 平時考(兩次)30% / 上機測驗15%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:30%; background:var(--accent);" title="期末考 30%"></div>
+                <div class="eval-fill" style="width:25%; background:var(--muted);" title="期中考 25%"></div>
+                <div class="eval-fill" style="width:30%; background:var(--fg); opacity:0.35;" title="平時考 30%"></div>
+                <div class="eval-fill" style="width:15%; background:var(--fg); opacity:0.15;" title="上機測驗 15%"></div>
+              </div>
+            </div>
+
+            <div style="font-weight:700; font-family:var(--font-mono); font-size:12px; margin: 10px 0 6px;">// 課程單元大綱與測驗節點</div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:25%;">週次 / 日期</th>
+                  <th>課程單元目標及章節</th>
+                  <th style="width:25%;">評量</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>W01 (09-15)</td><td>課程簡介 (第一堂出席計分，加選務必出席)</td><td>出席紀錄</td></tr>
+                <tr><td>W02 (09-22)</td><td>Chap.1-1 ~ 1-3 數字系統與轉換</td><td>每週上機測驗</td></tr>
+                <tr><td>W03 (09-29)</td><td>Chap.1-4 ~ 2-6 布林代數與邏輯閘</td><td>每週上機測驗</td></tr>
+                <tr><td>W04 (10-06)</td><td>Chap.2-7 ~ 3-2 卡諾圖化簡技術</td><td>每週上機測驗</td></tr>
+                <tr><td>W05 (10-13)</td><td>Chap.3-3 ~ 3-7 多位元邏輯閘電路實作</td><td>每週上機測驗</td></tr>
+                <tr class="exam-row">
+                  <td>W06 (10-20)</td>
+                  <td><span class="exam-tag">小考</span><strong>第一次小考</strong></td>
+                  <td><strong>平時考 (15%)</strong></td>
+                </tr>
+                <tr><td>W07 (10-27)</td><td>Chap.3-8 ~ 4-2 組合邏輯分析程序</td><td>每週上機測驗</td></tr>
+                <tr><td>W08 (11-03)</td><td>Chap.4-3 ~ 4-10 加法器、解碼器與多工器</td><td>每週上機測驗</td></tr>
+                <tr class="exam-row">
+                  <td>W09 (11-10)</td>
+                  <td><span class="exam-tag">期中考</span><strong>全校期中考週 (筆試測驗)</strong></td>
+                  <td><strong>期中考 (25%)</strong></td>
+                </tr>
+                <tr><td>W10 (11-17)</td><td>Chap.4-11 ~ 4-16 組合邏輯進階應用與 HDL 介紹</td><td>每週上機測驗</td></tr>
+                <tr><td>W11 (11-24)</td><td>Chap.4-17 ~ 4-24 鎖存器 (Latches) 與正反器</td><td>每週上機測驗</td></tr>
+                <tr><td>W12 (12-01)</td><td>Chap.5-1 ~ 5-5 同步循序邏輯與狀態分析</td><td>每週上機測驗</td></tr>
+                <tr><td>W13 (12-08)</td><td>Chap.5-6 ~ 5-11 狀態機設計程序與化簡</td><td>每週上機測驗</td></tr>
+                <tr class="exam-row">
+                  <td>W14 (12-15)</td>
+                  <td><span class="exam-tag">小考</span><strong>第二次小考</strong></td>
+                  <td><strong>平時考 2 (15%)</strong></td>
+                </tr>
+                <tr><td>W15 (12-22)</td><td>Chap.5-12 ~ 6-3 暫存器與二進位計數器</td><td>每週上機測驗</td></tr>
+                <tr><td>W16 (12-29)</td><td>Chap.6-4 ~ 6-9 移位暫存器與半導體記憶體</td><td>每週上機測驗</td></tr>
+                <tr><td>W17 (01-05)</td><td>學期總複習與問答</td><td>總複習</td></tr>
+                <tr class="exam-row">
+                  <td>W18 (01-12)</td>
+                  <td><span class="exam-tag">期末考</span><strong>學期考試週 (期末考筆試)</strong></td>
+                  <td><strong>期末考 (30%)</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="font-size:12px; color:var(--muted); margin-top:8px;">
+              <strong>教科書：</strong>《Digital Design: With an Introduction to Verilog HDL, VHDL, and SystemVerilog》Mano & Ciletti (6th Ed., 2018)
+            </div>
           </div>
-          <div style="font-size:11.5px; color:var(--muted);">
-            <strong>評分：</strong>專題成果發表 50% | 實作驗收 30% | 期末報告 20%
+        </details>
+
+        <!-- COURSE 4 -->
+        <details id="course-ge151b" class="border-dashed" data-search-keys="ge151b 媒體與國際關係 林琳文 選修 通識 週二 國際關係 tiktok 大外宣">
+          <summary>
+            <span>[GE151B] 媒體與國際關係 (選修 2學分 通識)</span>
+            <span class="sum-right">
+              <span>林琳文 &bull; 教學810</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>週二 13:10~15:00 (5,6節)</div>
+              <div><strong>地點：</strong>真知教學大樓 810</div>
+              <div><strong>授課教師：</strong>林琳文 教授</div>
+              <div><strong>教學助理：</strong>王呈鍵</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>課程宗旨：</strong>探討國際傳播、媒體外交、虛假訊息、大外宣及地緣政治角力對全球局勢之深刻影響。
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>期末報告 50% / 期中題目 30% / 出席問答 20%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:50%; background:var(--accent);" title="期末報告 50%"></div>
+                <div class="eval-fill" style="width:30%; background:var(--muted);" title="期中報告 30%"></div>
+                <div class="eval-fill" style="width:20%; background:var(--fg); opacity:0.25;" title="出席問答 20%"></div>
+              </div>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:25%;">週次 / 日期</th>
+                  <th>課程主題與探討焦點</th>
+                  <th style="width:25%;">評量</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>W01 (09-15)</td><td>導論：台灣看世界與世界看台灣</td><td>出席、問答</td></tr>
+                <tr><td>W02 (09-22)</td><td>周幽王的烽火台與川普的真實社群：媒體進化</td><td>出席、問答</td></tr>
+                <tr><td>W03 (09-29)</td><td>世界就是美國？全球權力移轉與媒體圖像</td><td>出席、問答</td></tr>
+                <tr class="exam-row">
+                  <td>W04 (10-06)</td>
+                  <td><span class="exam-tag">論壇</span>產業科技高峰論壇 (張靜愚圖書館1F秀德廳)</td>
+                  <td>論壇出席</td>
+                </tr>
+                <tr><td>W05 (10-13)</td><td>打造國家形象：大外宣與媒體外交</td><td>出席、問答</td></tr>
+                <tr><td>W06 (10-20)</td><td>好想贏韓國！國家發展、國族意識與媒體</td><td>出席、問答</td></tr>
+                <tr><td>W07 (10-27)</td><td>川普滿天下：媒體與民粹主義的傳播</td><td>出席、問答</td></tr>
+                <tr><td>W08 (11-03)</td><td>得 TikTok 者得天下：地緣政治與媒體安全</td><td>出席、問答</td></tr>
+                <tr class="exam-row">
+                  <td>W09 (11-10)</td>
+                  <td><span class="exam-tag">期中週</span>彈性自主學習週</td>
+                  <td><strong>提交報告題目 (30%)</strong></td>
+                </tr>
+                <tr><td>W10 (11-17)</td><td>他們改變世界了嗎？全球抗議政治與媒體</td><td>出席、問答</td></tr>
+                <tr><td>W11 (11-24)</td><td>尋找敵人與視覺化戰爭：現代戰事與輿論傳播</td><td>出席、問答</td></tr>
+                <tr><td>W12 (12-01)</td><td>誰在製造恐怖？恐怖主義與國際媒體框架</td><td>出席、問答</td></tr>
+                <tr><td>W13 (12-08)</td><td>道德的界線：國際正義與媒體倫理規範</td><td>出席、問答</td></tr>
+                <tr><td>W14 (12-15)</td><td>謊言與脫歐：後真相時代的國際關係</td><td>出席、問答</td></tr>
+                <tr><td>W15 (12-22)</td><td>文化帝國主義與不平等的全球傳播</td><td>問答、報告</td></tr>
+                <tr class="exam-row">
+                  <td>W16 (12-29)</td>
+                  <td><span class="exam-tag">發表</span><strong>分組期末專案口頭報告 (第一梯次)</strong></td>
+                  <td>期末專案評分</td>
+                </tr>
+                <tr class="exam-row">
+                  <td>W17 (01-05)</td>
+                  <td><span class="exam-tag">發表</span><strong>分組期末專案口頭報告 (第二梯次)</strong></td>
+                  <td>期末專案評分</td>
+                </tr>
+                <tr class="exam-row">
+                  <td>W18 (01-12)</td>
+                  <td><span class="exam-tag">期末週</span>學期考試週</td>
+                  <td><strong>繳交期末書面報告 (50%)</strong></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-      </details>
+        </details>
+
+        <!-- COURSE 5 -->
+        <details id="course-el255g" class="border-solid" data-search-keys="el255g 電子學三 薛光華 選修 核心 週三 op feedback 回授 頻率響應">
+          <summary>
+            <span>[EL255G] 電子學(三) (選修 3學分 核心基礎)</span>
+            <span class="sum-right">
+              <span>薛光華 &bull; 教學605</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>週三 15:10~18:00 (7,8,C節)</div>
+              <div><strong>地點：</strong>真知教學大樓 605</div>
+              <div><strong>授課教師：</strong>薛光華 教授</div>
+              <div><strong>備註：</strong>核心基礎選修 3 選 2</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>核心課題：</strong>BJT/FET 交流小訊號模型、回授四大架構（串聯/並聯）、OPA 放大器內部結構與頻率響應（FR）。
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>期中測驗 36% / 期末測驗 36% / 平時作業 28%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:36%; background:var(--accent);" title="期中測驗 36%"></div>
+                <div class="eval-fill" style="width:36%; background:var(--muted);" title="期末測驗 36%"></div>
+                <div class="eval-fill" style="width:28%; background:var(--fg); opacity:0.25;" title="平時作業 28%"></div>
+              </div>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:25%;">週次 / 日期</th>
+                  <th>內容章節目標</th>
+                  <th style="width:25%;">教學法/評量</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>W01 (09-16)</td><td>Introduction to Course & Review</td><td>講授</td></tr>
+                <tr><td>W02 (09-23)</td><td>BJT, FET Fundamental Characteristics</td><td>講授</td></tr>
+                <tr><td>W03 (09-30)</td><td>AC Model and Small-Signal Analyses</td><td>講授</td></tr>
+                <tr><td>W04 (10-07)</td><td>Introduction to Feedback Concept</td><td>講授</td></tr>
+                <tr><td>W05 (10-14)</td><td>Circuit Notes of Feedback</td><td>講授</td></tr>
+                <tr><td>W06 (10-21)</td><td>Series-Series Feedback Topology</td><td>講授</td></tr>
+                <tr><td>W07 (10-28)</td><td>Series-Shunt Feedback Topology</td><td>講授</td></tr>
+                <tr class="exam-row">
+                  <td>W08 (11-04)</td>
+                  <td><span class="exam-tag">測驗</span><strong>課堂定期測驗 (Test 1)</strong></td>
+                  <td>課堂測驗</td>
+                </tr>
+                <tr class="exam-row">
+                  <td>W09 (11-11)</td>
+                  <td><span class="exam-tag">期中考</span><strong>全校期中考週</strong></td>
+                  <td><strong>期中評量</strong></td>
+                </tr>
+                <tr><td>W10 (11-18)</td><td>Shunt-Shunt Feedback Circuit Analysis</td><td>講授</td></tr>
+                <tr><td>W11 (11-25)</td><td>Shunt-Series Feedback Circuit Analysis</td><td>講授</td></tr>
+                <tr><td>W12 (12-02)</td><td>Shunt-Series Feedback Advanced Analyses</td><td>講授</td></tr>
+                <tr class="exam-row">
+                  <td>W13 (12-09)</td>
+                  <td><span class="exam-tag">測驗</span><strong>課堂定期測驗 (Test 2)</strong></td>
+                  <td>課堂測驗</td>
+                </tr>
+                <tr><td>W14 (12-16)</td><td>Operational Amplifier 1 (OPA1 Architecture)</td><td>講授</td></tr>
+                <tr><td>W15 (12-23)</td><td>Operational Amplifier 2 (OPA2 Non-Idealities)</td><td>講授、測驗</td></tr>
+                <tr class="exam-row">
+                  <td>W16 (12-30)</td>
+                  <td><span class="exam-tag">測驗</span><strong>課堂定期測驗 (Test 3)</strong></td>
+                  <td>課堂測驗</td>
+                </tr>
+                <tr><td>W17 (01-06)</td><td>Frequency Response (FR) & Bode Plots</td><td>講授</td></tr>
+                <tr class="exam-row">
+                  <td>W18 (01-13)</td>
+                  <td><span class="exam-tag">期末考</span><strong>學期考試週 (期末考筆試)</strong></td>
+                  <td><strong>期末測驗 (36%)</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="font-size:12px; color:var(--muted); margin-top:8px;">
+              <strong>教科書：</strong>《Microelectronics Circuits》Sedra & Smith
+            </div>
+          </div>
+        </details>
+
+        <!-- COURSE 6 -->
+        <details id="course-el520g" class="border-dashed" data-search-keys="el520g 基礎半導體物理 元件 武義 選修 週四 pn接面 肖特基 載子">
+          <summary>
+            <span>[EL520G] 基礎半導體物理與元件(一) (選修 3學分)</span>
+            <span class="sum-right">
+              <span>武義 &bull; 商設208</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>週四 09:10~12:00 (2,3,4節)</div>
+              <div><strong>地點：</strong>商業設計系館 208</div>
+              <div><strong>授課教師：</strong>武義 教授</div>
+              <div><strong>辦公室時段：</strong>週四 5,6 節</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>課程目標：</strong>使修課學生理解半導體晶格、能帶分佈、載子傳輸現象、P-N 接面與歐姆/肖特基接觸。
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>期末測驗 37% / 期中測驗 33% / 正規化調分 20% / 平時作業 10%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:37%; background:var(--accent);" title="期末 37%"></div>
+                <div class="eval-fill" style="width:33%; background:var(--muted);" title="期中 33%"></div>
+                <div class="eval-fill" style="width:20%; background:var(--fg); opacity:0.35;" title="正規化調分 20%"></div>
+                <div class="eval-fill" style="width:10%; background:var(--fg); opacity:0.15;" title="平時 10%"></div>
+              </div>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:25%;">週次 / 日期</th>
+                  <th>課程進度主題</th>
+                  <th style="width:25%;">評量方式</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>W01 (09-17)</td><td>Introduction to Semiconductors & Material Science</td><td>Homework</td></tr>
+                <tr><td>W02 (09-24)</td><td>Semiconductor Lattices and Crystal Structures (I)</td><td>Quiz, Homework</td></tr>
+                <tr><td>W03 (10-01)</td><td>Semiconductor Lattices and Structures (II)</td><td>Quiz, Homework</td></tr>
+                <tr><td>W04 (10-08)</td><td>Energy Bands and Carrier Concentrations (I)</td><td>Quiz, Homework</td></tr>
+                <tr><td>W05 (10-15)</td><td>Energy Bands and Carrier Concentrations (II)</td><td>Quiz, Homework</td></tr>
+                <tr><td>W06 (10-22)</td><td>Carrier Transport Phenomena: Drift & Diffusion</td><td>Quiz, Homework</td></tr>
+                <tr><td>W07 (10-29)</td><td>Carrier Recombination and Lifetime Dynamics</td><td>Homework</td></tr>
+                <tr><td>W08 (11-05)</td><td>Midterm Comprehensive Review</td><td>Homework Review</td></tr>
+                <tr class="exam-row">
+                  <td>W09 (11-12)</td>
+                  <td><span class="exam-tag">期中考</span><strong>Midterm Examination</strong></td>
+                  <td><strong>期中測驗 (33%)</strong></td>
+                </tr>
+                <tr><td>W10 (11-19)</td><td>P-N Junctions: Depletion Region & Built-in Potential</td><td>Quiz, Exercise</td></tr>
+                <tr><td>W11 (11-26)</td><td>P-N Junctions: Current-Voltage (I-V) Characteristics</td><td>Quiz, Exercise</td></tr>
+                <tr><td>W12 (12-03)</td><td>P-N Junctions: Junction Capacitance & Breakdown</td><td>Quiz, Exercise</td></tr>
+                <tr><td>W13 (12-10)</td><td>Metal-Semiconductor Contacts: Ohmic Contacts</td><td>Quiz, Exercise</td></tr>
+                <tr><td>W14 (12-17)</td><td>Schottky Contacts & Rectifying Characteristics</td><td>Quiz, Exercise</td></tr>
+                <tr><td>W15 (12-24)</td><td>(行憲紀念日調整放假)</td><td>-</td></tr>
+                <tr><td>W16 (12-31)</td><td>Advanced Schottky Barrier & Modern Applications</td><td>Quiz, Exercise</td></tr>
+                <tr><td>W17 (01-07)</td><td>Flexible Teaching Week: AI Self-Learning & Exercises</td><td>Homework</td></tr>
+                <tr class="exam-row">
+                  <td>W18 (01-14)</td>
+                  <td><span class="exam-tag">期末考</span><strong>Flexible Teaching Week: Final Examination</strong></td>
+                  <td><strong>期末測驗 (37%)</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="font-size:12px; color:var(--muted); margin-top:8px;">
+              <strong>教科書：</strong>《Semiconductor Devices Physics and Technology》S.M. Sze and M.K. Lee (3rd Ed., Wiley, ISBN: 978-0470-53794-7)
+            </div>
+          </div>
+        </details>
+
+        <!-- COURSE 7 -->
+        <details id="course-ge488f" class="border-solid" data-search-keys="ge488f 工程倫理 郭泰辰 鄭琬馨 週四 pbl ai倫理 資訊倫理 專業倫理">
+          <summary>
+            <span>[GE488F] 工程倫理 (選修 2學分 電資指定)</span>
+            <span class="sum-right">
+              <span>郭泰辰, 鄭琬馨 &bull; 教學112</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>週四 13:10~15:00 (5,6節)</div>
+              <div><strong>地點：</strong>真知教學大樓 112</div>
+              <div><strong>授課教師：</strong>郭泰辰 (70%)、鄭琬馨 (30%)</div>
+              <div><strong>教學助理：</strong>許堯閔</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>課程模式：</strong>PBL 導向與個案分析。探討工程師職責、計畫性淘汰、AI 倫理與道德決策。包含 DIT 前測與後測評量。
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>作業30% / 報告30% / 專題20% / 平時10% / DIT測驗10%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:30%; background:var(--accent);" title="作業 30%"></div>
+                <div class="eval-fill" style="width:30%; background:var(--muted);" title="報告 30%"></div>
+                <div class="eval-fill" style="width:20%; background:var(--fg); opacity:0.4;" title="專題 20%"></div>
+                <div class="eval-fill" style="width:10%; background:var(--fg); opacity:0.25;" title="平時表現 10%"></div>
+                <div class="eval-fill" style="width:10%; background:var(--fg); opacity:0.15;" title="DIT前後測 10%"></div>
+              </div>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:25%;">週次 / 日期</th>
+                  <th>課程進度主題</th>
+                  <th style="width:25%;">活動與評量</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>W01 (09-17)</td><td>工程倫理介紹與導讀</td><td>講授、PBL問答</td></tr>
+                <tr><td>W02 (09-24)</td><td>一般倫理：何謂倫理學</td><td>講授、討論、作業</td></tr>
+                <tr><td>W03 (10-01)</td><td>一般倫理：應用倫理學</td><td>講授、作業</td></tr>
+                <tr><td>W04 (10-08)</td><td>一般倫理：專業倫理概論</td><td>個案問答、作業</td></tr>
+                <tr><td>W05 (10-15)</td><td>一般倫理：趨勢倫理學</td><td>個案研究、作業</td></tr>
+                <tr><td>W06 (10-22)</td><td>經典個案分析、AI 應用倫理 (Part 1)</td><td>PBL討論、作業</td></tr>
+                <tr><td>W07 (10-29)</td><td>經典個案分析、AI 應用倫理 (Part 2)</td><td>PBL討論、作業</td></tr>
+                <tr><td>W08 (11-05)</td><td>期中考複習與指導</td><td>個別或小組指導</td></tr>
+                <tr class="exam-row">
+                  <td>W09 (11-12)</td>
+                  <td><span class="exam-tag">期中考</span><strong>期中考試週</strong></td>
+                  <td><strong>期中考</strong></td>
+                </tr>
+                <tr><td>W10 (11-19)</td><td>道德倫理與專業自律</td><td>講授、PBL</td></tr>
+                <tr><td>W11 (11-26)</td><td>教學倫理與學術誠信</td><td>講授、PBL</td></tr>
+                <tr><td>W12 (12-03)</td><td>從「計畫性淘汰」探討環境永續與工程倫理</td><td>講授、PBL</td></tr>
+                <tr><td>W13 (12-10)</td><td>資訊倫理與數位人權</td><td>講授、PBL</td></tr>
+                <tr class="exam-row">
+                  <td>W14 (12-17)</td>
+                  <td><span class="exam-tag">發表</span><strong>分組口頭報告 (心得發表 Part 1)</strong></td>
+                  <td>口頭報告</td>
+                </tr>
+                <tr><td>W15 (12-24)</td><td>平安感恩日 (校定放假)</td><td>-</td></tr>
+                <tr class="exam-row">
+                  <td>W16 (12-31)</td>
+                  <td><span class="exam-tag">發表</span><strong>分組口頭報告 (心得發表 Part 2)</strong></td>
+                  <td>口頭報告 (30%)</td>
+                </tr>
+                <tr><td>W17 (01-07)</td><td>期末考複習與個別諮詢</td><td>指導問答</td></tr>
+                <tr class="exam-row">
+                  <td>W18 (01-14)</td>
+                  <td><span class="exam-tag">期末週</span><strong>學期考試週：期末專題報告繳交</strong></td>
+                  <td><strong>期末報告繳交</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <!-- COURSE 8 -->
+        <details id="course-el214g" class="border-dashed" data-search-keys="el214g 電磁學一 康振方 必修 週五 向量分析 高斯定律 庫侖 介電質 邊界值">
+          <summary>
+            <span>[EL214G] 電磁學(一) (必修 3學分)</span>
+            <span class="sum-right">
+              <span>康振方 &bull; 教學605</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>週五 10:10~13:00 (3,4,B節)</div>
+              <div><strong>地點：</strong>真知教學大樓 605</div>
+              <div><strong>授課教師：</strong>康振方 教授</div>
+              <div><strong>教學助理：</strong>潘冠宇</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>核心內容：</strong>向量微積分、座標轉換、靜電場、高斯定律、邊界值問題求解、拉普拉斯方程與鏡像法。
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>期末考 40% / 期中考 30% / 平時作業 30%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:40%; background:var(--accent);" title="期末考 40%"></div>
+                <div class="eval-fill" style="width:30%; background:var(--muted);" title="期中考 30%"></div>
+                <div class="eval-fill" style="width:30%; background:var(--fg); opacity:0.25;" title="平時作業 30%"></div>
+              </div>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:25%;">週次 / 日期</th>
+                  <th>課程單元目標及進度內容</th>
+                  <th style="width:25%;">評量</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>W01 (09-18)</td><td>課程介紹與物理向量概念啟發</td><td>問答</td></tr>
+                <tr><td>W02 (09-25)</td><td>第二章 向量分析：基本運算與場的表示</td><td>問答</td></tr>
+                <tr><td>W03 (10-02)</td><td>第二章 向量分析：微分與積分形式</td><td>問答</td></tr>
+                <tr><td>W04 (10-09)</td><td>第二章 向量分析：曲線座標、向量場散度與旋度</td><td>問答</td></tr>
+                <tr><td>W05 (10-16)</td><td>第二章 向量分析：斯托克定理與狄拉克函數</td><td>問答</td></tr>
+                <tr><td>W06 (10-23)</td><td>第三章 靜電場：庫侖定律與電場強度計算</td><td>問答</td></tr>
+                <tr><td>W07 (10-30)</td><td>第三章 靜電場：高斯定律與電通量密度</td><td>問答</td></tr>
+                <tr><td>W08 (11-06)</td><td>第三章 靜電場：電位、梯度與能量定義</td><td>問答、測驗</td></tr>
+                <tr class="exam-row">
+                  <td>W09 (11-13)</td>
+                  <td><span class="exam-tag">期中考</span><strong>期中考試週 (電磁學期中大考)</strong></td>
+                  <td><strong>期中考 (30%)</strong></td>
+                </tr>
+                <tr><td>W10 (11-20)</td><td>第三章 靜電場：導體性質與介電質極化現象</td><td>問答</td></tr>
+                <tr><td>W11 (11-27)</td><td>第三章 靜電場：偏極向量與電位移向量 (D)</td><td>問答</td></tr>
+                <tr><td>W12 (12-04)</td><td>第三章 靜電場：電容計算、靜電功與能量密度</td><td>問答</td></tr>
+                <tr><td>W13 (12-11)</td><td>第四章 靜電場問題：帕松方程式與拉普拉斯方程式</td><td>問答</td></tr>
+                <tr><td>W14 (12-18)</td><td>第四章 靜電場問題：鏡像法 I (平面與接地邊界)</td><td>問答</td></tr>
+                <tr><td>W15 (12-25)</td><td>第四章 靜電場問題：鏡像法 II (導體球與點電荷)</td><td>問答</td></tr>
+                <tr><td>W16 (01-01)</td><td>第四章 靜電場問題：直交座標的分離變數邊界問題</td><td>問答</td></tr>
+                <tr><td>W17 (01-08)</td><td>第四章 靜電場問題：曲線座標的邊界問題求解</td><td>問答、測驗</td></tr>
+                <tr class="exam-row">
+                  <td>W18 (01-15)</td>
+                  <td><span class="exam-tag">期末考</span><strong>學期考試週 (電磁學期末總結大考)</strong></td>
+                  <td><strong>期末考 (40%)</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="font-size:12px; color:var(--muted); margin-top:8px;">
+              <strong>教科書：</strong>《Introduction to Electrodynamics》David J. Griffiths (4th Ed., Cambridge)
+            </div>
+          </div>
+        </details>
+
+        <!-- COURSE 9 -->
+        <details id="course-el403d" class="border-solid" data-search-keys="el403d 物聯網創意設計二 電子系 選修 專案 iot 硬體整合">
+          <summary>
+            <span>[EL403D] 物聯網創意設計(二) (選修 專案實作)</span>
+            <span class="sum-right">
+              <span>電子工程系 &bull; 獨立專案</span>
+              <span class="chevron">&gt;</span>
+            </span>
+          </summary>
+          <div class="detail-body">
+            <div class="specs-grid">
+              <div><strong>時段：</strong>依指導教授與小組預定時段</div>
+              <div><strong>地點：</strong>電子系專業專案實驗室</div>
+              <div><strong>性質：</strong>物聯網整合實作與創意應用</div>
+              <div><strong>上課形式：</strong>獨立研究與定期成果驗收</div>
+              <div style="grid-column: 1 / -1;">
+                <strong>專案說明：</strong>本課程無每週排定課表教室，修課同學須依團隊期程進行硬體焊接、感測器連網整合及雲端數據平台串接，並於期末繳交成品展示。
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono); margin-bottom:4px;">
+                <span>成績考核結構</span>
+                <span>專案實品展示 50% / 實作進度驗收 30% / 期末成果報告 20%</span>
+              </div>
+              <div class="eval-bar">
+                <div class="eval-fill" style="width:50%; background:var(--accent);" title="成品展示 50%"></div>
+                <div class="eval-fill" style="width:30%; background:var(--muted);" title="進度驗收 30%"></div>
+                <div class="eval-fill" style="width:20%; background:var(--fg); opacity:0.25;" title="期末報告 20%"></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+      </div>
     </div>
 
     <div id="panel-grading" class="view-panel">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
         <span class="tech-pill">EVALUATION METRICS & POLICIES</span>
-        <span style="font-family:var(--font-mono); font-size:10px; color:var(--muted);">WEIGHT DISTRIBUTION</span>
+        <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted);">WEIGHT DISTRIBUTION</span>
       </div>
 
       <div class="card border-solid">
-        <h2 style="font-family:var(--font-display); font-size:1.3rem; margin-bottom:12px;">課程評分結構分解</h2>
+        <h2 style="font-family:var(--font-display); font-size:1.4rem; margin-bottom:12px;">修習科目考核比例總覽</h2>
         
-        <div style="margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
-            <span>電子系統實驗 (EL339G)</span>
-            <span>期中25% / 專題35% / 實驗20% / 出席20%</span>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-family:var(--font-mono);">
+            <span><strong>電子系統實驗</strong> (EL339G)</span>
+            <span>專題35% / 期中25% / 實驗20% / 出席20%</span>
           </div>
           <div class="eval-bar">
-            <div class="eval-fill" style="width:25%; background:var(--accent);"></div>
-            <div class="eval-fill" style="width:35%; background:var(--muted);"></div>
+            <div class="eval-fill" style="width:35%; background:var(--accent);"></div>
+            <div class="eval-fill" style="width:25%; background:var(--muted);"></div>
             <div class="eval-fill" style="width:20%; background:var(--fg); opacity:0.35;"></div>
             <div class="eval-fill" style="width:20%; background:var(--fg); opacity:0.15;"></div>
           </div>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
-            <span>Matlab程式設計 (EL307G)</span>
-            <span>作業 60% / 期末專題 40%</span>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-family:var(--font-mono);">
+            <span><strong>Matlab程式設計</strong> (EL307G)</span>
+            <span>平時作業 60% / 期末專題 40%</span>
           </div>
           <div class="eval-bar">
             <div class="eval-fill" style="width:60%; background:var(--accent);"></div>
@@ -1254,23 +2079,23 @@
           </div>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
-            <span>數位邏輯電路設計 (EL210C)</span>
-            <span>期末30% / 期中25% / 上機15% / 平時30%</span>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-family:var(--font-mono);">
+            <span><strong>數位邏輯電路設計</strong> (EL210C)</span>
+            <span>期末30% / 期中25% / 平時考30% / 上機15%</span>
           </div>
           <div class="eval-bar">
             <div class="eval-fill" style="width:30%; background:var(--accent);"></div>
             <div class="eval-fill" style="width:25%; background:var(--muted);"></div>
-            <div class="eval-fill" style="width:15%; background:var(--fg); opacity:0.4;"></div>
-            <div class="eval-fill" style="width:30%; background:var(--fg); opacity:0.15;"></div>
+            <div class="eval-fill" style="width:30%; background:var(--fg); opacity:0.35;"></div>
+            <div class="eval-fill" style="width:15%; background:var(--fg); opacity:0.15;"></div>
           </div>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
-            <span>媒體與國際關係 (GE151B)</span>
-            <span>期末50% / 期中30% / 平時問答20%</span>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-family:var(--font-mono);">
+            <span><strong>媒體與國際關係</strong> (GE151B)</span>
+            <span>期末報告 50% / 期中 30% / 出席問答 20%</span>
           </div>
           <div class="eval-bar">
             <div class="eval-fill" style="width:50%; background:var(--accent);"></div>
@@ -1279,10 +2104,10 @@
           </div>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
-            <span>電子學(三) (EL255G)</span>
-            <span>期中36% / 期末36% / 作業28%</span>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-family:var(--font-mono);">
+            <span><strong>電子學(三)</strong> (EL255G)</span>
+            <span>期中測驗 36% / 期末測驗 36% / 平時作業 28%</span>
           </div>
           <div class="eval-bar">
             <div class="eval-fill" style="width:36%; background:var(--accent);"></div>
@@ -1291,10 +2116,10 @@
           </div>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
-            <span>基礎半導體物理 (EL520G)</span>
-            <span>期末37% / 期中33% / 正規化20% / 平時10%</span>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-family:var(--font-mono);">
+            <span><strong>基礎半導體物理</strong> (EL520G)</span>
+            <span>期末 37% / 期中 33% / 正規化調分 20% / 平時 10%</span>
           </div>
           <div class="eval-bar">
             <div class="eval-fill" style="width:37%; background:var(--accent);"></div>
@@ -1304,10 +2129,10 @@
           </div>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
-            <span>工程倫理 (GE488F)</span>
-            <span>作業30% / 報告30% / 專題20% / 平時10% / DIT10%</span>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-family:var(--font-mono);">
+            <span><strong>工程倫理</strong> (GE488F)</span>
+            <span>作業 30% / 報告 30% / 專題 20% / 平時 10% / DIT 10%</span>
           </div>
           <div class="eval-bar">
             <div class="eval-fill" style="width:30%; background:var(--accent);"></div>
@@ -1319,9 +2144,9 @@
         </div>
 
         <div>
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
-            <span>電磁學(一) (EL214G)</span>
-            <span>期末考 40% / 期中考 30% / 作業 30%</span>
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-family:var(--font-mono);">
+            <span><strong>電磁學(一)</strong> (EL214G)</span>
+            <span>期末考 40% / 期中考 30% / 平時作業 30%</span>
           </div>
           <div class="eval-bar">
             <div class="eval-fill" style="width:40%; background:var(--accent);"></div>
@@ -1333,13 +2158,13 @@
 
       <!-- University Academic Regulations Card -->
       <div class="card border-dashed">
-        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:8px;">// 北海道蜜瓜學則規範摘要</h3>
-        <ul style="font-size:12.5px; padding-left:18px; line-height:1.7;">
+        <h3 style="font-family:var(--font-display); font-size:1.2rem; margin-bottom:8px;">// 北海道蜜瓜學則規範重點節錄</h3>
+        <ul style="font-size:13px; padding-left:18px; line-height:1.75;">
           <li><strong>課堂紀律：</strong>上課時請勿飲食，嚴禁穿拖鞋進入教室。</li>
-          <li><strong>請假與缺曠 (第26條)：</strong>未經請假或假滿未到為曠課；請假核准為缺課，缺席紀錄依教師評分大綱扣分。</li>
-          <li><strong>重大假別保障：</strong>懷孕、育嬰(三歲以下子女)或遭遇重病、家庭變故並經全人關懷委員會認定者，依學則特殊條款保障。</li>
-          <li><strong>考試補考規範 (第34條)：</strong>公假、重病、親喪等重大事由需事先核准，補考以一次為限且由授課教師自行主持。</li>
-          <li><strong>學術誠信 (第35條)：</strong>任何考試舞弊行為一經查覺，該次考試成績以零分計算並移送校規處分。</li>
+          <li><strong>請假與缺曠 (第26條)：</strong>未經請假或假期已滿而不上課者為曠課，請假核准未上課者為缺課。缺課出席依任課教師大綱規定計分。</li>
+          <li><strong>重大假別保障 (第26條第2項)：</strong>懷孕、育嬰(三歲以下子女)或因遭遇重病、受傷、重大家庭變故經全人關懷委員會認定者不受曠課扣考限制。</li>
+          <li><strong>補考規範 (第34條)：</strong>因公假、重病、親喪等不能參加期中或學期考試者，經核准後始准補考一次，由教師自行舉行，補考成績按規定併入學期成績。</li>
+          <li><strong>考試誠信 (第35條)：</strong>任何考試舞弊一經查覺，除該次成績以零分計算外，並視情節輕重依校規處分。</li>
         </ul>
       </div>
     </div>
@@ -1375,10 +2200,12 @@
 
   <script>
     (function () {
-      /* Theme Switcher System (Keyed to vv-theme) */
+      /* Theme System (Key: vv-theme) */
       const html = document.documentElement;
       const btnLight = document.getElementById('btn-theme-light');
       const btnDark = document.getElementById('btn-theme-dark');
+      const btnToggleFx = document.getElementById('btn-toggle-effects');
+      const fxStatusText = document.getElementById('fx-status-text');
 
       function setTheme(theme) {
         html.classList.add('switching');
@@ -1398,14 +2225,33 @@
         }, 420);
       }
 
-      /* Initial theme resolution */
+      /* CRT Scanline / Effects Toggle with OFF as Default (Key: vv-crt-fx) */
+      function setEffects(state) {
+        html.setAttribute('data-effects', state);
+        localStorage.setItem('vv-crt-fx', state);
+        fxStatusText.textContent = state === 'on' ? '[ON]' : '[OFF]';
+        btnToggleFx.classList.toggle('active', state === 'on');
+      }
+
       const savedTheme = localStorage.getItem('vv-theme') || 
         (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
       setTheme(savedTheme);
 
+      // Default to 'off' for clean high-contrast readability
+      const savedEffects = localStorage.getItem('vv-crt-fx') || 'off';
+      setEffects(savedEffects);
+
       btnLight.addEventListener('click', () => setTheme('light'));
       btnDark.addEventListener('click', () => setTheme('dark'));
 
+      btnToggleFx.addEventListener('click', () => {
+        const current = html.getAttribute('data-effects') || 'off';
+        const next = current === 'on' ? 'off' : 'on';
+        setEffects(next);
+        showToast(next === 'off' ? 'CRT 特效已關閉（高清晰純淨模式）' : 'CRT 特效已開啟（HUD 終端掃描線模式）');
+      });
+
+      /* Keyboard Shortcut 'T' for theme */
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
         if (e.key === 't' || e.key === 'T') {
@@ -1414,6 +2260,7 @@
         }
       });
 
+      /* Tab Navigation Logic */
       const tabs = document.querySelectorAll('.tab-btn');
       const panels = {
         'panel-schedule': document.getElementById('panel-schedule'),
@@ -1476,31 +2323,32 @@
         }, 3200);
       }
 
+      /* Jump to Syllabus with auto-expand and HUD pulse glow */
       function jumpToCourse(courseId) {
         if (courseId === 'mentor-interview') {
-          showToast('導師晤談非授課科目：劉宏煥 老師 / 週一 12:10~13:00 (電學511)');
+          showToast('導師晤談非授課科目：劉宏煥 老師 / 週一 12:10~13:00 (電學大樓 511)');
           return;
         }
 
         const targetDetail = document.getElementById(courseId);
         if (!targetDetail) {
-          showToast('該科目無常規大綱（獨立專案或非排定時段）');
+          showToast('未找到該科目大綱（可能為獨立專案或個別時段）');
           return;
         }
 
         // 1. Switch to SYLLABUS panel
         switchTab('panel-courses');
 
-        // 2. Open the details disclosure
+        // 2. Open details disclosure
         targetDetail.open = true;
 
-        // 3. Smooth scroll into view
+        // 3. Smooth scroll
         setTimeout(() => {
           targetDetail.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-          // 4. Trigger HUD Pulse Glow animation
+          // 4. Trigger pulse animation
           targetDetail.classList.remove('highlight-target');
-          void targetDetail.offsetWidth; // Force DOM reflow
+          void targetDetail.offsetWidth;
           targetDetail.classList.add('highlight-target');
 
           setTimeout(() => {
@@ -1509,13 +2357,204 @@
         }, 120);
       }
 
-      // Attach click listeners to all clickable timetable cells and quick jump tags
-      const interactiveElements = document.querySelectorAll('[data-course-id]');
-      interactiveElements.forEach((el) => {
-        el.addEventListener('click', (e) => {
-          const courseId = el.getAttribute('data-course-id');
-          if (courseId) {
-            jumpToCourse(courseId);
+      /* Bind click to all timetable cells & jump badges */
+      document.addEventListener('click', (e) => {
+        const target = e.target.closest('[data-course-id]');
+        if (target) {
+          const id = target.getAttribute('data-course-id');
+          if (id) jumpToCourse(id);
+        }
+      });
+
+      const dayScheduleData = {
+        1: [
+          {
+            slot: '5-7 節',
+            time: '13:10 - 16:00',
+            name: '電子系統實驗',
+            code: 'EL339G',
+            teacher: '陳聖文 教授',
+            room: '電學大樓 410',
+            type: '必修 1學分',
+            courseId: 'course-el339g'
+          },
+          {
+            slot: '8-D 節',
+            time: '16:10 - 18:50',
+            name: 'Matlab程式設計',
+            code: 'EL307G',
+            teacher: '陳瑞奇 教授 (EMI)',
+            room: '電學大樓 410',
+            type: '選修 3學分',
+            courseId: 'course-el307g'
+          },
+          {
+            slot: 'B 節',
+            time: '12:10 - 13:00',
+            name: '※ 導師晤談時段 ※',
+            code: 'OFFICE-HR',
+            teacher: '劉宏煥 老師',
+            room: '電學大樓 511',
+            type: '生活與課業諮詢',
+            courseId: 'mentor-interview'
+          }
+        ],
+        2: [
+          {
+            slot: '2-4 節',
+            time: '09:10 - 12:00',
+            name: '數位邏輯電路設計',
+            code: 'EL210C',
+            teacher: '陳淳杰 教授',
+            room: '真知教學大樓 309',
+            type: '必修 3學分 &bull; 翻轉教學',
+            courseId: 'course-el210c'
+          },
+          {
+            slot: '5-6 節',
+            time: '13:10 - 15:00',
+            name: '媒體與國際關係',
+            code: 'GE151B',
+            teacher: '林琳文 教授',
+            room: '真知教學大樓 810',
+            type: '延伸選修通識 2學分',
+            courseId: 'course-ge151b'
+          }
+        ],
+        3: [
+          {
+            slot: '7-C 節',
+            time: '15:10 - 18:00',
+            name: '電子學(三)',
+            code: 'EL255G',
+            teacher: '薛光華 教授',
+            room: '真知教學大樓 605',
+            type: '選修 3學分 (核心3選2)',
+            courseId: 'course-el255g'
+          }
+        ],
+        4: [
+          {
+            slot: '2-4 節',
+            time: '09:10 - 12:00',
+            name: '基礎半導體物理與元件(一)',
+            code: 'EL520G',
+            teacher: '武義 教授',
+            room: '商業設計系館 208',
+            type: '選修 3學分',
+            courseId: 'course-el520g'
+          },
+          {
+            slot: '5-6 節',
+            time: '13:10 - 15:00',
+            name: '工程倫理',
+            code: 'GE488F',
+            teacher: '郭泰辰, 鄭琬馨 教授',
+            room: '真知教學大樓 112',
+            type: '電資指定通識 2學分',
+            courseId: 'course-ge488f'
+          }
+        ],
+        5: [
+          {
+            slot: '3-B 節',
+            time: '10:10 - 13:00',
+            name: '電磁學(一)',
+            code: 'EL214G',
+            teacher: '康振方 教授',
+            room: '真知教學大樓 605',
+            type: '必修 3學分',
+            courseId: 'course-el214g'
+          }
+        ]
+      };
+
+      const dayCardsList = document.getElementById('day-cards-list');
+      const dayPillBtns = document.querySelectorAll('.day-pill-btn');
+
+      function renderDaySchedule(dayNum) {
+        const courses = dayScheduleData[dayNum] || [];
+        dayCardsList.innerHTML = '';
+
+        if (courses.length === 0) {
+          dayCardsList.innerHTML = `<div class="card border-dashed" style="text-align:center; padding:24px; color:var(--muted);">本日無排定課程</div>`;
+          return;
+        }
+
+        courses.forEach(c => {
+          const card = document.createElement('div');
+          card.className = 'day-course-card';
+          card.innerHTML = `
+            <div class="card-time-col">
+              <div class="card-slot-badge">${c.slot}</div>
+              <div class="card-time-range">${c.time}</div>
+            </div>
+            <div class="card-info-col">
+              <div class="card-title">${c.name}</div>
+              <div class="card-meta">
+                <span>[${c.code}]</span>
+                <span>${c.teacher}</span>
+                <span>&bull;</span>
+                <span><strong>${c.room}</strong></span>
+                <span>&bull;</span>
+                <span>${c.type}</span>
+              </div>
+            </div>
+            <button class="card-action-btn" data-course-id="${c.courseId}">
+              檢視大綱 &rarr;
+            </button>
+          `;
+          dayCardsList.appendChild(card);
+        });
+      }
+
+      dayPillBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          dayPillBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const day = parseInt(btn.getAttribute('data-day'), 10);
+          renderDaySchedule(day);
+        });
+      });
+
+      // Default day schedule (Monday = 1)
+      renderDaySchedule(1);
+
+      /* Switcher between Matrix View and Day-by-Day View */
+      const btnViewMatrix = document.getElementById('btn-view-matrix');
+      const btnViewDay = document.getElementById('btn-view-day');
+      const viewModeMatrix = document.getElementById('view-mode-matrix');
+      const viewModeDay = document.getElementById('view-mode-day');
+
+      btnViewMatrix.addEventListener('click', () => {
+        btnViewMatrix.classList.add('active');
+        btnViewDay.classList.remove('active');
+        viewModeMatrix.style.display = 'block';
+        viewModeDay.style.display = 'none';
+      });
+
+      btnViewDay.addEventListener('click', () => {
+        btnViewDay.classList.add('active');
+        btnViewMatrix.classList.remove('active');
+        viewModeMatrix.style.display = 'none';
+        viewModeDay.style.display = 'block';
+      });
+
+      const syllabusSearch = document.getElementById('syllabus-search');
+      const syllabusList = document.getElementById('syllabus-list');
+      const syllabusItems = syllabusList.querySelectorAll('details');
+
+      syllabusSearch.addEventListener('input', (e) => {
+        const query = e.target.value.trim().toLowerCase();
+
+        syllabusItems.forEach(item => {
+          const keys = (item.getAttribute('data-search-keys') || '').toLowerCase();
+          const text = item.textContent.toLowerCase();
+          const match = query === '' || keys.includes(query) || text.includes(query);
+
+          item.style.display = match ? 'block' : 'none';
+          if (match && query !== '') {
+            item.open = true;
           }
         });
       });
@@ -1526,10 +2565,10 @@
       const bootSub = document.getElementById('boot-sub');
 
       const bootSteps = [
-        { progress: 20, status: "BOOTING VV-KERNEL...", sub: "Verifying 1151 academic syllabus modules..." },
-        { progress: 55, status: "LOADING TIMETABLE...", sub: "Mapping EE classrooms: 410, 309, 605, 112..." },
-        { progress: 85, status: "CALIBRATING VV-HUD...", sub: "Binding interactive cell anchors to syllabus..." },
-        { progress: 100, status: "VV-SYSTEM READY", sub: "HokkaidoMelo terminal online." }
+        { progress: 20, status: "BOOTING VV-LEGIBILITY KERNEL...", sub: "Calibrating high-contrast black/white palette..." },
+        { progress: 55, status: "BUILDING SCHEDULE MATRICES...", sub: "Parsing weekly timetable and day-by-day views..." },
+        { progress: 85, status: "INDEXING 1151 SYLLABUS...", sub: "Binding interactive cell anchors to outline targets..." },
+        { progress: 100, status: "VV-SYSTEM READY", sub: "Terminal ready for student HokkaidoMelo." }
       ];
 
       let stepIdx = 0;
@@ -1557,9 +2596,9 @@
             stepIdx++;
           } else {
             clearInterval(bootInterval);
-            setTimeout(dismissBoot, 280);
+            setTimeout(dismissBoot, 260);
           }
-        }, 240);
+        }, 220);
       }
 
     })();
