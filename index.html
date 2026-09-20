@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>CYCU // 1151 ACADEMIC HUD TERMINAL</title>
+  <title>VV // 1151 ACADEMIC HUD TERMINAL</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Chakra+Petch:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   
   <style>
-    /* ==========================================================================
-       01. TOKENS & DUAL THEMES (STRICT BLACK & WHITE ONLY)
-       ========================================================================== */
     :root {
       --max-width: 580px;
       --font-display: 'Anton', sans-serif;
@@ -50,7 +47,6 @@
       transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, fill 0.4s ease, opacity 0.4s ease !important;
     }
 
-    /* Base Reset */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -69,9 +65,6 @@
       position: relative;
     }
 
-    /* ==========================================================================
-       02. ATMOSPHERIC HUD LAYERS
-       ========================================================================== */
     .bg {
       position: fixed;
       inset: 0;
@@ -140,9 +133,6 @@
       user-select: none;
     }
 
-    /* ==========================================================================
-       03. TOP HUD TICKER
-       ========================================================================== */
     .ticker-bar {
       position: fixed;
       top: 0;
@@ -187,9 +177,6 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* ==========================================================================
-       04. SYSTEM BOOT OVERLAY
-       ========================================================================== */
     #boot-screen {
       position: fixed;
       inset: 0;
@@ -243,9 +230,6 @@
       transition: width 0.15s ease-out;
     }
 
-    /* ==========================================================================
-       05. MAIN CONTAINER & CONTROLS
-       ========================================================================== */
     .container {
       max-width: var(--max-width);
       margin: 0 auto;
@@ -279,7 +263,6 @@
       margin-top: 4px;
     }
 
-    /* Theme Switcher */
     .theme-toggle-wrap {
       display: flex;
       align-items: center;
@@ -305,7 +288,6 @@
       font-weight: 700;
     }
 
-    /* Pulse dot */
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -332,9 +314,6 @@
       50% { opacity: 0.3; transform: scale(0.8); }
     }
 
-    /* ==========================================================================
-       06. CARDS & BORDER-STYLE SYSTEM
-       ========================================================================== */
     .card {
       background: var(--panel);
       backdrop-filter: blur(12px) saturate(1.15);
@@ -345,7 +324,6 @@
       position: relative;
     }
 
-    /* Multifunction border styles instead of color */
     .border-solid {
       border: 1px solid var(--line);
     }
@@ -356,7 +334,6 @@
       border: 3px double var(--line);
     }
 
-    /* Cut corner badge */
     .tech-pill {
       font-family: var(--font-mono);
       font-size: 10px;
@@ -367,13 +344,12 @@
       clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
     }
 
-    /* Collapsible summary list */
     details {
       margin-bottom: 12px;
       background: var(--panel);
       border-radius: 8px;
       overflow: hidden;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, box-shadow 0.3s;
     }
     details[open] {
       background: var(--panel-hover);
@@ -407,7 +383,25 @@
       border-bottom-right-radius: 8px;
     }
 
-    /* Data Tables */
+    /* Target highlight flash for syllabus jump */
+    details.highlight-target {
+      animation: hudPulseGlow 1.6s ease-in-out;
+    }
+
+    @keyframes hudPulseGlow {
+      0% {
+        box-shadow: 0 0 0 2px var(--accent), 0 0 32px var(--glow);
+        transform: scale(1.015);
+      }
+      50% {
+        box-shadow: 0 0 0 2px var(--accent), 0 0 16px var(--glow);
+      }
+      100% {
+        box-shadow: none;
+        transform: scale(1);
+      }
+    }
+
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -425,7 +419,6 @@
       font-weight: 600;
     }
 
-    /* Timetable Grid */
     .tt-table {
       width: 100%;
       border-collapse: collapse;
@@ -451,19 +444,28 @@
       color: var(--on-accent);
       font-weight: 600;
       font-size: 10px;
-      padding: 4px 2px;
+      padding: 5px 2px;
       line-height: 1.25;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.16s ease, filter 0.16s ease;
+      user-select: none;
+    }
+    .tt-cell-active:hover {
+      filter: brightness(0.9);
+      transform: scale(0.98);
+    }
+    .tt-cell-active:active {
+      transform: scale(0.95);
     }
     .tt-loc {
       font-size: 8.5px;
       opacity: 0.85;
       display: block;
       font-family: var(--font-mono);
+      pointer-events: none;
     }
 
-    /* ==========================================================================
-       07. PANELS / TABS TRANSITIONS
-       ========================================================================== */
     .view-panel {
       display: none;
       animation-duration: 0.28s;
@@ -490,9 +492,6 @@
       to { opacity: 1; transform: translateX(0); }
     }
 
-    /* ==========================================================================
-       08. CAPSULE BOTTOM TAB BAR (ACCORDING TO SPEC)
-       ========================================================================== */
     .tab-bar {
       position: fixed;
       bottom: 0;
@@ -557,7 +556,6 @@
       line-height: 1.1;
     }
 
-    /* L-shape Corner Decoration */
     .tab-btn .corner {
       position: absolute;
       bottom: 2px;
@@ -570,7 +568,6 @@
       transition: opacity 0.2s;
     }
 
-    /* Active State Spec */
     .tab-btn.active {
       border-color: var(--accent);
       box-shadow: 0 0 0 1px var(--accent), 0 0 20px var(--glow), 0 8px 20px rgba(0, 0, 0, 0.25);
@@ -590,7 +587,6 @@
       opacity: 1;
     }
 
-    /* Hover State Spec: Cursor Radial Glow */
     .tab-btn::after {
       content: '';
       position: absolute;
@@ -605,9 +601,6 @@
       opacity: 1;
     }
 
-    /* ==========================================================================
-       09. PROGRESS & STATS
-       ========================================================================== */
     .stat-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -634,7 +627,6 @@
       letter-spacing: 0.12em;
     }
 
-    /* Progress bar */
     .eval-bar {
       display: flex;
       height: 8px;
@@ -649,9 +641,44 @@
       border-right: 1px solid var(--bg);
     }
 
-    /* ==========================================================================
-       10. ACCESSIBILITY & RESPONSIVE
-       ========================================================================== */
+    /* HUD Floating Notification Toast */
+    #hud-toast {
+      position: fixed;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-30px);
+      background: var(--bg);
+      color: var(--fg);
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 20px var(--glow);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      letter-spacing: 0.1em;
+      padding: 8px 16px;
+      border-radius: 6px;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    #hud-toast.toast-show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .interactive-badge {
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .interactive-badge:hover {
+      opacity: 0.75;
+    }
+
     @media (max-width: 640px) {
       .vstrip { display: none; }
       .scanlines { opacity: 0.18; }
@@ -673,12 +700,13 @@
       #boot-screen { display: none !important; }
       .grid { animation: none; }
       .ticker-move { animation: none; }
+      details.highlight-target { animation: none !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Layers -->
+  <!-- Background decorative layers -->
   <div class="bg"></div>
   <div class="grid"></div>
   <div class="noise"></div>
@@ -687,25 +715,28 @@
 
   <!-- Vertical Strip Decoration (Desktop only) -->
   <div class="vstrip">
-    <span>CYCU//DEPT.OF.ELECTRONIC.ENG</span>
-    <span>SYS.VER: 1151-B&W-BUILD</span>
+    <span>北海道蜜瓜//VV.SECURITY.PROTOCOL</span>
+    <span>SYS.VER: 1151-VV-RELEASE</span>
     <span>STATUS: OPERATIONAL</span>
   </div>
 
-  <!-- Top Fixed Ticker -->
   <div class="ticker-bar">
-    <div class="ticker-label">CYCU//SYS</div>
+    <div class="ticker-label">VV//SYS</div>
     <div class="ticker-wrap">
       <div class="ticker-move">
-        &bull; 學生：詹景閎 (11326141) &bull; 1151 學年度課表系統上線 &bull; 總修習門數：9 門 &bull; 總學分數：22 學分 &bull; 停修：0 學分 &bull; 請遵守實驗室安全規範，實驗室內請勿飲食 &bull; 按鍵盤 [T] 快速切換黑白主題 &bull;
+        &bull; 學生：HokkaidoMelo &bull; VV 1151 課程終端機就緒 &bull; 總修習門數：9 門 &bull; 總學分數：22 學分 &bull; 停修：0 學分 &bull; 點擊課表格子即可跳轉大綱說明 &bull; 北海道蜜瓜學則條款就緒 &bull; 實驗室請勿飲食穿拖鞋 &bull; 按鍵盤 [T] 快速切換黑白主題 &bull;
       </div>
     </div>
   </div>
 
-  <!-- Boot Overlay (Clickable to Skip) -->
+  <div id="hud-toast" role="status" aria-live="polite">
+    <span class="pulse-dot"></span>
+    <span id="hud-toast-msg">SYS INFO</span>
+  </div>
+
   <div id="boot-screen" role="dialog" aria-modal="true" aria-label="系統開機程序">
     <div class="boot-box">
-      <div class="boot-title">RK-CYBER // BOOT</div>
+      <div class="boot-title">VV // BOOT</div>
       <div id="boot-status" style="font-size:12px; letter-spacing:0.18em; color:#bbb;">INITIALIZING MATRIX...</div>
       <div class="boot-bar-track">
         <div class="boot-bar-fill" id="boot-progress"></div>
@@ -715,14 +746,12 @@
     </div>
   </div>
 
-  <!-- Central Narrow Column Content -->
   <main class="container">
 
-    <!-- Header HUD -->
     <header class="header-hud">
       <div>
-        <h1 class="brand-title">CYBER // CURRICULUM</h1>
-        <div class="brand-sub">電子工程學系 1151 學期課程戰情總端</div>
+        <h1 class="brand-title">VV // TERMINAL</h1>
+        <div class="brand-sub">北海道蜜瓜 電子工程學系 1151 課程戰情總端</div>
       </div>
       <div class="theme-toggle-wrap">
         <button class="thm-b" id="btn-theme-light" aria-pressed="false" title="白底黑字">LIGHT</button>
@@ -730,17 +759,16 @@
       </div>
     </header>
 
-    <!-- Student Quick Info -->
     <section class="card border-solid" style="margin-bottom: 20px;">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
-          <span class="tech-pill">STUDENT PROFILE</span>
-          <div style="font-size: 1.15rem; font-weight:700; margin-top:6px;">詹景閎 &bull; 11326141</div>
-          <div style="font-size:11.5px; color:var(--muted); font-family:var(--font-mono);">中原大學 電子工程學系 (三年級)</div>
+          <span class="tech-pill">VV//NODE-PROFILE</span>
+          <div style="font-size: 1.15rem; font-weight:700; margin-top:6px;">HokkaidoMelo</div>
+          <div style="font-size:11.5px; color:var(--muted); font-family:var(--font-mono);">北海道蜜瓜 電子工程學系 (三年級)</div>
         </div>
         <div class="status-badge">
           <span class="pulse-dot"></span>
-          <span>ONLINE</span>
+          <span>VV-ONLINE</span>
         </div>
       </div>
       
@@ -765,12 +793,9 @@
       </div>
     </section>
 
-    <!-- ====================================================================
-         PANEL 01: SCHEDULE (課表與時間矩陣)
-         ==================================================================== -->
     <div id="panel-schedule" class="view-panel active">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-        <span class="tech-pill">TIMETABLE MATRIX</span>
+        <span class="tech-pill">TIMETABLE MATRIX [CLICK CELL TO VIEW]</span>
         <span style="font-family:var(--font-mono); font-size:10px; color:var(--muted);">SYNC: 1151-REGULAR</span>
       </div>
 
@@ -790,78 +815,78 @@
             <tr>
               <td class="tt-slot">2<br><span style="font-size:8px; opacity:0.6;">09:10</span></td>
               <td>-</td>
-              <td class="tt-cell-active">數位邏輯<span class="tt-loc">教309</span></td>
+              <td class="tt-cell-active" data-course-id="course-el210c" title="點擊檢視 數位邏輯 課程大綱">數位邏輯<span class="tt-loc">教309</span></td>
               <td>-</td>
-              <td class="tt-cell-active">半導體物理<span class="tt-loc">商設208</span></td>
+              <td class="tt-cell-active" data-course-id="course-el520g" title="點擊檢視 半導體物理 課程大綱">半導體物理<span class="tt-loc">商設208</span></td>
               <td>-</td>
             </tr>
             <tr>
               <td class="tt-slot">3<br><span style="font-size:8px; opacity:0.6;">10:10</span></td>
               <td>-</td>
-              <td class="tt-cell-active">數位邏輯<span class="tt-loc">教309</span></td>
+              <td class="tt-cell-active" data-course-id="course-el210c" title="點擊檢視 數位邏輯 課程大綱">數位邏輯<span class="tt-loc">教309</span></td>
               <td>-</td>
-              <td class="tt-cell-active">半導體物理<span class="tt-loc">商設208</span></td>
-              <td class="tt-cell-active">電磁學(一)<span class="tt-loc">教605</span></td>
+              <td class="tt-cell-active" data-course-id="course-el520g" title="點擊檢視 半導體物理 課程大綱">半導體物理<span class="tt-loc">商設208</span></td>
+              <td class="tt-cell-active" data-course-id="course-el214g" title="點擊檢視 電磁學(一) 課程大綱">電磁學(一)<span class="tt-loc">教605</span></td>
             </tr>
             <tr>
               <td class="tt-slot">4<br><span style="font-size:8px; opacity:0.6;">11:10</span></td>
               <td>-</td>
-              <td class="tt-cell-active">數位邏輯<span class="tt-loc">教309</span></td>
+              <td class="tt-cell-active" data-course-id="course-el210c" title="點擊檢視 數位邏輯 課程大綱">數位邏輯<span class="tt-loc">教309</span></td>
               <td>-</td>
-              <td class="tt-cell-active">半導體物理<span class="tt-loc">商設208</span></td>
-              <td class="tt-cell-active">電磁學(一)<span class="tt-loc">教605</span></td>
+              <td class="tt-cell-active" data-course-id="course-el520g" title="點擊檢視 半導體物理 課程大綱">半導體物理<span class="tt-loc">商設208</span></td>
+              <td class="tt-cell-active" data-course-id="course-el214g" title="點擊檢視 電磁學(一) 課程大綱">電磁學(一)<span class="tt-loc">教605</span></td>
             </tr>
             <tr>
               <td class="tt-slot">B<br><span style="font-size:8px; opacity:0.6;">12:10</span></td>
-              <td style="font-size:8.5px; opacity:0.5;">導師晤談*</td>
+              <td style="font-size:8.5px; opacity:0.6; cursor:pointer;" data-course-id="mentor-interview" title="導師晤談時間">導師晤談*</td>
               <td>-</td>
               <td>-</td>
               <td>-</td>
-              <td class="tt-cell-active">電磁學(一)<span class="tt-loc">教605</span></td>
+              <td class="tt-cell-active" data-course-id="course-el214g" title="點擊檢視 電磁學(一) 課程大綱">電磁學(一)<span class="tt-loc">教605</span></td>
             </tr>
             <tr>
               <td class="tt-slot">5<br><span style="font-size:8px; opacity:0.6;">13:10</span></td>
-              <td class="tt-cell-active">電子系統實<span class="tt-loc">電410</span></td>
-              <td class="tt-cell-active">媒體國際<span class="tt-loc">教810</span></td>
+              <td class="tt-cell-active" data-course-id="course-el339g" title="點擊檢視 電子系統實驗 課程大綱">電子系統實<span class="tt-loc">電410</span></td>
+              <td class="tt-cell-active" data-course-id="course-ge151b" title="點擊檢視 媒體與國際關係 課程大綱">媒體國際<span class="tt-loc">教810</span></td>
               <td>-</td>
-              <td class="tt-cell-active">工程倫理<span class="tt-loc">教112</span></td>
+              <td class="tt-cell-active" data-course-id="course-ge488f" title="點擊檢視 工程倫理 課程大綱">工程倫理<span class="tt-loc">教112</span></td>
               <td>-</td>
             </tr>
             <tr>
               <td class="tt-slot">6<br><span style="font-size:8px; opacity:0.6;">14:10</span></td>
-              <td class="tt-cell-active">電子系統實<span class="tt-loc">電410</span></td>
-              <td class="tt-cell-active">媒體國際<span class="tt-loc">教810</span></td>
+              <td class="tt-cell-active" data-course-id="course-el339g" title="點擊檢視 電子系統實驗 課程大綱">電子系統實<span class="tt-loc">電410</span></td>
+              <td class="tt-cell-active" data-course-id="course-ge151b" title="點擊檢視 媒體與國際關係 課程大綱">媒體國際<span class="tt-loc">教810</span></td>
               <td>-</td>
-              <td class="tt-cell-active">工程倫理<span class="tt-loc">教112</span></td>
+              <td class="tt-cell-active" data-course-id="course-ge488f" title="點擊檢視 工程倫理 課程大綱">工程倫理<span class="tt-loc">教112</span></td>
               <td>-</td>
             </tr>
             <tr>
               <td class="tt-slot">7<br><span style="font-size:8px; opacity:0.6;">15:10</span></td>
-              <td class="tt-cell-active">電子系統實<span class="tt-loc">電410</span></td>
+              <td class="tt-cell-active" data-course-id="course-el339g" title="點擊檢視 電子系統實驗 課程大綱">電子系統實<span class="tt-loc">電410</span></td>
               <td>-</td>
-              <td class="tt-cell-active">電子學(三)<span class="tt-loc">教605</span></td>
+              <td class="tt-cell-active" data-course-id="course-el255g" title="點擊檢視 電子學(三) 課程大綱">電子學(三)<span class="tt-loc">教605</span></td>
               <td>-</td>
               <td>-</td>
             </tr>
             <tr>
               <td class="tt-slot">8<br><span style="font-size:8px; opacity:0.6;">16:10</span></td>
-              <td class="tt-cell-active">Matlab程式<span class="tt-loc">電410</span></td>
+              <td class="tt-cell-active" data-course-id="course-el307g" title="點擊檢視 Matlab程式設計 課程大綱">Matlab程式<span class="tt-loc">電410</span></td>
               <td>-</td>
-              <td class="tt-cell-active">電子學(三)<span class="tt-loc">教605</span></td>
+              <td class="tt-cell-active" data-course-id="course-el255g" title="點擊檢視 電子學(三) 課程大綱">電子學(三)<span class="tt-loc">教605</span></td>
               <td>-</td>
               <td>-</td>
             </tr>
             <tr>
               <td class="tt-slot">C<br><span style="font-size:8px; opacity:0.6;">17:05</span></td>
-              <td class="tt-cell-active">Matlab程式<span class="tt-loc">電410</span></td>
+              <td class="tt-cell-active" data-course-id="course-el307g" title="點擊檢視 Matlab程式設計 課程大綱">Matlab程式<span class="tt-loc">電410</span></td>
               <td>-</td>
-              <td class="tt-cell-active">電子學(三)<span class="tt-loc">教605</span></td>
+              <td class="tt-cell-active" data-course-id="course-el255g" title="點擊檢視 電子學(三) 課程大綱">電子學(三)<span class="tt-loc">教605</span></td>
               <td>-</td>
               <td>-</td>
             </tr>
             <tr>
               <td class="tt-slot">D<br><span style="font-size:8px; opacity:0.6;">18:00</span></td>
-              <td class="tt-cell-active">Matlab程式<span class="tt-loc">電410</span></td>
+              <td class="tt-cell-active" data-course-id="course-el307g" title="點擊檢視 Matlab程式設計 課程大綱">Matlab程式<span class="tt-loc">電410</span></td>
               <td>-</td>
               <td>-</td>
               <td>-</td>
@@ -871,27 +896,39 @@
         </table>
       </div>
 
-      <!-- Non-time / Special courses Card (Double Border) -->
+      <!-- Quick Jump Card for all 9 enrolled courses -->
+      <div class="card border-solid">
+        <div style="font-family:var(--font-mono); font-size:11px; margin-bottom:8px; font-weight:700;">// 本學期 9 門修習課程快速導航</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tech-pill interactive-badge" data-course-id="course-el339g">電子系統實驗</span>
+          <span class="tech-pill interactive-badge" data-course-id="course-el307g">Matlab程式設計</span>
+          <span class="tech-pill interactive-badge" data-course-id="course-el210c">數位邏輯電路設計</span>
+          <span class="tech-pill interactive-badge" data-course-id="course-ge151b">媒體與國際關係</span>
+          <span class="tech-pill interactive-badge" data-course-id="course-el255g">電子學(三)</span>
+          <span class="tech-pill interactive-badge" data-course-id="course-el520g">基礎半導體物理(一)</span>
+          <span class="tech-pill interactive-badge" data-course-id="course-ge488f">工程倫理</span>
+          <span class="tech-pill interactive-badge" data-course-id="course-el214g">電磁學(一)</span>
+          <span class="tech-pill interactive-badge" data-course-id="course-el403d">物聯網創意設計(二)</span>
+        </div>
+      </div>
+
       <div class="card border-double">
         <div style="font-family:var(--font-mono); font-size:11px; margin-bottom:4px; font-weight:700;">// SPECIAL ENTRIES</div>
         <ul style="list-style: square inside; font-size:12.5px;">
-          <li><strong>EL403D 物聯網創意設計(二)</strong>：無固定課表排程（請依系辦/指導老師通知執行）。</li>
-          <li><strong>導師晤談時段</strong>：劉宏煥 老師（週一 12:10~13:00 / 電學 511，自由前往）。</li>
+          <li class="interactive-badge" data-course-id="course-el403d" style="margin-bottom:4px;"><strong>EL403D 物聯網創意設計(二)</strong>：無固定課表排程（點擊檢視專案說明）。</li>
+          <li class="interactive-badge" data-course-id="mentor-interview"><strong>導師晤談時段</strong>：劉宏煥 老師（週一 12:10~13:00 / 電學 511，自由前往）。</li>
         </ul>
       </div>
     </div>
 
-    <!-- ====================================================================
-         PANEL 02: SYLLABUS DETAILS (各科詳細大綱與進度)
-         ==================================================================== -->
     <div id="panel-courses" class="view-panel">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
         <span class="tech-pill">DETAILED SYLLABUS DIRECTORY</span>
-        <span style="font-family:var(--font-mono); font-size:10px; color:var(--muted);">COUNT: 6 DETAILED</span>
+        <span style="font-family:var(--font-mono); font-size:10px; color:var(--muted);">COUNT: 9 SYLLABUS</span>
       </div>
 
       <!-- COURSE 1 -->
-      <details class="border-solid">
+      <details id="course-el339g" class="border-solid">
         <summary>
           <span>[EL339G] 電子系統實驗 (必修 1學分)</span>
           <span style="font-family:var(--font-mono); font-size:11px;">陳聖文 &bull; 電學410</span>
@@ -930,7 +967,7 @@
       </details>
 
       <!-- COURSE 2 -->
-      <details class="border-dashed">
+      <details id="course-el307g" class="border-dashed">
         <summary>
           <span>[EL307G] Matlab程式設計 (選修 3學分 EMI)</span>
           <span style="font-family:var(--font-mono); font-size:11px;">陳瑞奇 &bull; 電學410</span>
@@ -971,7 +1008,7 @@
       </details>
 
       <!-- COURSE 3 -->
-      <details class="border-solid">
+      <details id="course-el210c" class="border-solid">
         <summary>
           <span>[EL210C] 數位邏輯電路設計 (必修 3學分)</span>
           <span style="font-family:var(--font-mono); font-size:11px;">陳淳杰 &bull; 教學309</span>
@@ -1006,7 +1043,7 @@
       </details>
 
       <!-- COURSE 4 -->
-      <details class="border-dashed">
+      <details id="course-ge151b" class="border-dashed">
         <summary>
           <span>[GE151B] 媒體與國際關係 (選修 2學分 通識)</span>
           <span style="font-family:var(--font-mono); font-size:11px;">林琳文 &bull; 教學810</span>
@@ -1037,7 +1074,7 @@
       </details>
 
       <!-- COURSE 5 -->
-      <details class="border-solid">
+      <details id="course-el255g" class="border-solid">
         <summary>
           <span>[EL255G] 電子學(三) (選修 3學分 核心)</span>
           <span style="font-family:var(--font-mono); font-size:11px;">薛光華 &bull; 教學605</span>
@@ -1072,7 +1109,7 @@
       </details>
 
       <!-- COURSE 6 -->
-      <details class="border-dashed">
+      <details id="course-el520g" class="border-dashed">
         <summary>
           <span>[EL520G] 基礎半導體物理與元件(一) (選修 3學分)</span>
           <span style="font-family:var(--font-mono); font-size:11px;">武義 &bull; 商設208</span>
@@ -1105,7 +1142,7 @@
       </details>
 
       <!-- COURSE 7 -->
-      <details class="border-solid">
+      <details id="course-ge488f" class="border-solid">
         <summary>
           <span>[GE488F] 工程倫理 (必選 2學分 PBL)</span>
           <span style="font-family:var(--font-mono); font-size:11px;">郭泰辰, 鄭琬馨 &bull; 教學112</span>
@@ -1136,7 +1173,7 @@
       </details>
 
       <!-- COURSE 8 -->
-      <details class="border-dashed">
+      <details id="course-el214g" class="border-dashed">
         <summary>
           <span>[EL214G] 電磁學(一) (必修 3學分)</span>
           <span style="font-family:var(--font-mono); font-size:11px;">康振方 &bull; 教學605</span>
@@ -1165,11 +1202,25 @@
           </div>
         </div>
       </details>
+
+      <!-- COURSE 9 -->
+      <details id="course-el403d" class="border-solid">
+        <summary>
+          <span>[EL403D] 物聯網創意設計(二) (選修)</span>
+          <span style="font-family:var(--font-mono); font-size:11px;">電子系 &bull; 獨立專案</span>
+        </summary>
+        <div class="detail-body">
+          <div style="margin-bottom:8px;">
+            <strong>時段：</strong>依指導教授與專案小組約定時段進行 | <strong>性質：</strong>物聯網系統與實務應用設計<br>
+            <strong>專案說明：</strong>本課程為自主研究與物聯網模組硬體創作整合，無每週固定教室排程，請定期向專案指導教授進行進度報告與驗收。
+          </div>
+          <div style="font-size:11.5px; color:var(--muted);">
+            <strong>評分：</strong>專題成果發表 50% | 實作驗收 30% | 期末報告 20%
+          </div>
+        </div>
+      </details>
     </div>
 
-    <!-- ====================================================================
-         PANEL 03: EVALUATION & GRADING (評量權重雷達與政策)
-         ==================================================================== -->
     <div id="panel-grading" class="view-panel">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
         <span class="tech-pill">EVALUATION METRICS & POLICIES</span>
@@ -1179,7 +1230,6 @@
       <div class="card border-solid">
         <h2 style="font-family:var(--font-display); font-size:1.3rem; margin-bottom:12px;">課程評分結構分解</h2>
         
-        <!-- Breakdown rows -->
         <div style="margin-bottom:12px;">
           <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
             <span>電子系統實驗 (EL339G)</span>
@@ -1281,9 +1331,9 @@
         </div>
       </div>
 
-      <!-- University Academic Regulations Card (Dashed) -->
+      <!-- University Academic Regulations Card -->
       <div class="card border-dashed">
-        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:8px;">// 中原大學學則規範摘要</h3>
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:8px;">// 北海道蜜瓜學則規範摘要</h3>
         <ul style="font-size:12.5px; padding-left:18px; line-height:1.7;">
           <li><strong>課堂紀律：</strong>上課時請勿飲食，嚴禁穿拖鞋進入教室。</li>
           <li><strong>請假與缺曠 (第26條)：</strong>未經請假或假滿未到為曠課；請假核准為缺課，缺席紀錄依教師評分大綱扣分。</li>
@@ -1296,9 +1346,6 @@
 
   </main>
 
-  <!-- ==========================================================================
-       11. FIXED BOTTOM CAPSULE TAB BAR
-       ========================================================================== -->
   <nav class="tab-bar" aria-label="分頁導航">
     <div class="tab-bar-inner">
       
@@ -1326,12 +1373,9 @@
     </div>
   </nav>
 
-  <!-- ==========================================================================
-       12. CONTROLLER LOGIC (JS)
-       ========================================================================== -->
   <script>
     (function () {
-      // 1. Theme Switcher System
+      /* Theme Switcher System (Keyed to vv-theme) */
       const html = document.documentElement;
       const btnLight = document.getElementById('btn-theme-light');
       const btnDark = document.getElementById('btn-theme-dark');
@@ -1339,7 +1383,7 @@
       function setTheme(theme) {
         html.classList.add('switching');
         html.setAttribute('data-theme', theme);
-        localStorage.setItem('rk-theme', theme);
+        localStorage.setItem('vv-theme', theme);
 
         if (theme === 'light') {
           btnLight.setAttribute('aria-pressed', 'true');
@@ -1354,15 +1398,14 @@
         }, 420);
       }
 
-      // Initial theme resolution
-      const savedTheme = localStorage.getItem('rk-theme') || 
+      /* Initial theme resolution */
+      const savedTheme = localStorage.getItem('vv-theme') || 
         (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
       setTheme(savedTheme);
 
       btnLight.addEventListener('click', () => setTheme('light'));
       btnDark.addEventListener('click', () => setTheme('dark'));
 
-      // Keyboard Shortcut 'T' to toggle theme
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
         if (e.key === 't' || e.key === 'T') {
@@ -1371,7 +1414,6 @@
         }
       });
 
-      // 2. Tab Capsule Switching with Directional Animations
       const tabs = document.querySelectorAll('.tab-btn');
       const panels = {
         'panel-schedule': document.getElementById('panel-schedule'),
@@ -1381,36 +1423,36 @@
       const panelOrder = ['panel-schedule', 'panel-courses', 'panel-grading'];
       let currentPanelId = 'panel-schedule';
 
+      function switchTab(targetId) {
+        if (targetId === currentPanelId) return;
+
+        const oldIndex = panelOrder.indexOf(currentPanelId);
+        const newIndex = panelOrder.indexOf(targetId);
+        const isForward = newIndex > oldIndex;
+
+        tabs.forEach(t => {
+          const match = t.getAttribute('data-target') === targetId;
+          t.classList.toggle('active', match);
+          t.setAttribute('aria-selected', match ? 'true' : 'false');
+        });
+
+        const oldPanel = panels[currentPanelId];
+        const newPanel = panels[targetId];
+
+        oldPanel.classList.remove('active', 'slide-in-right', 'slide-in-left');
+        newPanel.classList.add('active');
+        newPanel.classList.add(isForward ? 'slide-in-right' : 'slide-in-left');
+
+        currentPanelId = targetId;
+      }
+
       tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
           const targetId = tab.getAttribute('data-target');
-          if (targetId === currentPanelId) return;
-
-          const oldIndex = panelOrder.indexOf(currentPanelId);
-          const newIndex = panelOrder.indexOf(targetId);
-          const isForward = newIndex > oldIndex;
-
-          // Update tabs state
-          tabs.forEach(t => {
-            t.classList.remove('active');
-            t.setAttribute('aria-selected', 'false');
-          });
-          tab.classList.add('active');
-          tab.setAttribute('aria-selected', 'true');
-
-          // Switch panel with motion
-          const oldPanel = panels[currentPanelId];
-          const newPanel = panels[targetId];
-
-          oldPanel.classList.remove('active', 'slide-in-right', 'slide-in-left');
-          newPanel.classList.add('active');
-          newPanel.classList.add(isForward ? 'slide-in-right' : 'slide-in-left');
-
-          currentPanelId = targetId;
+          switchTab(targetId);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Tab button mouse tracking radial glow effect
         tab.addEventListener('mousemove', (e) => {
           const rect = tab.getBoundingClientRect();
           const x = e.clientX - rect.left;
@@ -1420,17 +1462,74 @@
         });
       });
 
-      // 3. Cyber Boot Sequence (1.1s, bypassable)
+      /* HUD Notification Toast Controller */
+      const hudToast = document.getElementById('hud-toast');
+      const hudToastMsg = document.getElementById('hud-toast-msg');
+      let toastTimer = null;
+
+      function showToast(message) {
+        if (toastTimer) clearTimeout(toastTimer);
+        hudToastMsg.textContent = message;
+        hudToast.classList.add('toast-show');
+        toastTimer = setTimeout(() => {
+          hudToast.classList.remove('toast-show');
+        }, 3200);
+      }
+
+      function jumpToCourse(courseId) {
+        if (courseId === 'mentor-interview') {
+          showToast('導師晤談非授課科目：劉宏煥 老師 / 週一 12:10~13:00 (電學511)');
+          return;
+        }
+
+        const targetDetail = document.getElementById(courseId);
+        if (!targetDetail) {
+          showToast('該科目無常規大綱（獨立專案或非排定時段）');
+          return;
+        }
+
+        // 1. Switch to SYLLABUS panel
+        switchTab('panel-courses');
+
+        // 2. Open the details disclosure
+        targetDetail.open = true;
+
+        // 3. Smooth scroll into view
+        setTimeout(() => {
+          targetDetail.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+          // 4. Trigger HUD Pulse Glow animation
+          targetDetail.classList.remove('highlight-target');
+          void targetDetail.offsetWidth; // Force DOM reflow
+          targetDetail.classList.add('highlight-target');
+
+          setTimeout(() => {
+            targetDetail.classList.remove('highlight-target');
+          }, 1600);
+        }, 120);
+      }
+
+      // Attach click listeners to all clickable timetable cells and quick jump tags
+      const interactiveElements = document.querySelectorAll('[data-course-id]');
+      interactiveElements.forEach((el) => {
+        el.addEventListener('click', (e) => {
+          const courseId = el.getAttribute('data-course-id');
+          if (courseId) {
+            jumpToCourse(courseId);
+          }
+        });
+      });
+
       const bootScreen = document.getElementById('boot-screen');
       const bootStatus = document.getElementById('boot-status');
       const bootBar = document.getElementById('boot-progress');
       const bootSub = document.getElementById('boot-sub');
 
       const bootSteps = [
-        { progress: 20, status: "BOOTING KERNEL...", sub: "Verifying 1151 academic syllabus modules..." },
+        { progress: 20, status: "BOOTING VV-KERNEL...", sub: "Verifying 1151 academic syllabus modules..." },
         { progress: 55, status: "LOADING TIMETABLE...", sub: "Mapping EE classrooms: 410, 309, 605, 112..." },
-        { progress: 85, status: "CALIBRATING HUD...", sub: "Loading strict monochrome color variables..." },
-        { progress: 100, status: "SYSTEM READY", sub: "11326141 詹景閎 terminal online." }
+        { progress: 85, status: "CALIBRATING VV-HUD...", sub: "Binding interactive cell anchors to syllabus..." },
+        { progress: 100, status: "VV-SYSTEM READY", sub: "HokkaidoMelo terminal online." }
       ];
 
       let stepIdx = 0;
@@ -1460,7 +1559,7 @@
             clearInterval(bootInterval);
             setTimeout(dismissBoot, 280);
           }
-        }, 260);
+        }, 240);
       }
 
     })();
