@@ -263,6 +263,7 @@
       padding: 4px 9px;
       border-radius: 6px;
       cursor: pointer;
+      text-decoration: none;
       transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
@@ -279,6 +280,11 @@
       color: var(--on-accent);
       border-color: var(--accent);
       font-weight: 700;
+    }
+
+    .thm-b.link-btn {
+      border-color: var(--line-strong);
+      font-weight: 600;
     }
 
     /* Cards and Borders */
@@ -1045,9 +1051,9 @@
       .card-title { font-size: 14px; }
     }
 
-    @media (max-width: 380px) {
+    @media (max-width: 420px) {
       .tab-btn .n { display: none; }
-      .tab-btn .t { font-size: 11px; }
+      .tab-btn .t { font-size: 10.5px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1117,6 +1123,11 @@
       </div>
       <div class="hud-controls">
         <div class="controls-row">
+          <!-- External AA Link Button -->
+          <a href="https://a.zevzhan.com/" class="thm-b link-btn" title="跳轉至 AA 網頁 (https://a.zevzhan.com/)" target="_blank" rel="noopener noreferrer">
+            <span>AA NET</span>
+            <span style="font-size:9.5px; opacity:0.8;">↗</span>
+          </a>
           <button class="thm-b" id="btn-theme-light" aria-pressed="false" title="白底黑字">LIGHT</button>
           <button class="thm-b" id="btn-theme-dark" aria-pressed="true" title="黑底白字">DARK</button>
         </div>
@@ -2195,6 +2206,14 @@
         <span class="corner"></span>
       </button>
 
+      <!-- Panel 04: AA Net Direct Jump -->
+      <a href="https://a.zevzhan.com/" class="tab-btn" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+        <span class="n">PANEL 04</span>
+        <span class="icon">↗</span>
+        <span class="t">AA LINK</span>
+        <span class="corner"></span>
+      </a>
+
     </div>
   </nav>
 
@@ -2261,7 +2280,7 @@
       });
 
       /* Tab Navigation Logic */
-      const tabs = document.querySelectorAll('.tab-btn');
+      const tabs = document.querySelectorAll('.tab-btn[data-target]');
       const panels = {
         'panel-schedule': document.getElementById('panel-schedule'),
         'panel-courses': document.getElementById('panel-courses'),
@@ -2271,7 +2290,7 @@
       let currentPanelId = 'panel-schedule';
 
       function switchTab(targetId) {
-        if (targetId === currentPanelId) return;
+        if (!panels[targetId] || targetId === currentPanelId) return;
 
         const oldIndex = panelOrder.indexOf(currentPanelId);
         const newIndex = panelOrder.indexOf(targetId);
@@ -2296,8 +2315,10 @@
       tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
           const targetId = tab.getAttribute('data-target');
-          switchTab(targetId);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (targetId) {
+            switchTab(targetId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
         });
 
         tab.addEventListener('mousemove', (e) => {
